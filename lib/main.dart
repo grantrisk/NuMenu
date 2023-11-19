@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 
-import 'package:numenu/views/widgets/search_result.dart';
+import 'package:numenu/views/widgets/animated_data_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -53,6 +53,11 @@ class _MyMapState extends State<MyMap> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
+        /** Child 1: The map itself
+         *      The first is the deepest in the stack, so it will be the bottom-most
+         *    widget. It is only revealed when the user is not searching for
+         *    restaurants.
+         */
         FlutterMap(
           mapController: mapController,
           options: MapOptions(
@@ -83,8 +88,25 @@ class _MyMapState extends State<MyMap> {
             ),
           ],
         ),
-        SearchResult(),
+        /** Child 2: YellowBackground
+         *       The second widget is the yellow background that appears when the splash
+         *     screen is displayed, when the user is selecting a food type, and when
+         *     the user is viewing the restaurant info.
+         */
+
+        /** Child 3: The search results
+         *       The third widget is the search bar that is only displayed when the user
+         *       is searching for restaurants.
+         */
+
+        /** Child 4: Jumpy White Box (AnimatedDataView)
+         *        The fourth widget is the white box that appears when the user is
+         *    searching for restaurants. It will be animated to move up and down
+         *    depending on the state of the application.
+         */
+        const AnimatedDataView(),
       ],
     );
   }
 }
+
