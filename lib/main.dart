@@ -43,10 +43,10 @@ void main() async {
   // TODO get the lat and long of the businesses
   if (restaurants.isNotEmpty) {
     print('Fetched ${restaurants.length} restaurants:');
-    for (final restaurant in restaurants) {
+    /*for (final restaurant in restaurants) {
       print('Name: ${restaurant.name}, Address: ${restaurant.address}, '
           'Rating: ${restaurant.rating}, Location: ${restaurant.location}');
-    }
+    }*/
   } else {
     print('No restaurants found.');
   }
@@ -107,7 +107,14 @@ class _MyMapState extends State<MyMap> {
             LatLng(restaurant.location.latitude, restaurant.location.longitude),
         width: markerSize,
         height: markerSize,
-        child: Icon(Icons.location_on, color: Colors.blue, size: markerSize),
+        child: GestureDetector(
+          onTap: () {
+            print(
+                'Clicked on: ${restaurant.name}, Address: ${restaurant.address}, '
+                'Rating: ${restaurant.rating}');
+          },
+          child: Icon(Icons.location_on, color: Colors.blue, size: markerSize),
+        ),
       );
     }).toList();
   }
