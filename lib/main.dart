@@ -5,15 +5,57 @@ import 'dart:math' as math;
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:numenu/views/widgets/animated_data_view.dart';
+import 'package:numenu/services/location_service.dart';
+import 'package:numenu/api/api.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  await dotenv.load(fileName: ".env");
+  Position position;
+
+  try {
+    position = await LocationService.getCurrentLocation();
+    final service = RestaurantService();
+    final restaurants = await service.getRestaurants(
+      latitude: position.latitude,
+      longitude: position.longitude,
+      type: RestaurantType.pizzaRestaurant,
+    );
+
+    if (restaurants.isNotEmpty) {
+      print('Fetched ${restaurants.length} restaurants:');
+      for (final restaurant in restaurants) {
+        print('Name: ${restaurant.name}, Address: ${restaurant.address}');
+      }
+    } else {
+      print('No restaurants found.');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+    // Create a Position object with default values
+    position = Position(
+      latitude: 0.0,
+      longitude: 0.0,
+      timestamp: DateTime.now(),
+      accuracy: 0,
+      altitude: 0,
+      heading: 0,
+      speed: 0,
+      speedAccuracy: 0,
+      altitudeAccuracy: 0,
+      headingAccuracy: 0,
+    );
+  }
+
+  runApp(MyApp(position: position));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final Position position;
+
+  MyApp({Key? key, required this.position}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +65,7 @@ class MyApp extends StatelessWidget {
           title: const Text('NuMenu'),
           backgroundColor: Colors.black,
         ),
-        body: MyMap(),
+        body: MyMap(position: position),
       ),
       theme: ThemeData(
           primaryColor: Colors.black, secondaryHeaderColor: Colors.amber),
@@ -32,7 +74,9 @@ class MyApp extends StatelessWidget {
 }
 
 class MyMap extends StatefulWidget {
-  MyMap({Key? key}) : super(key: key);
+  final Position position;
+
+  MyMap({Key? key, required this.position}) : super(key: key);
 
   @override
   _MyMapState createState() => _MyMapState();
@@ -61,7 +105,8 @@ class _MyMapState extends State<MyMap> {
         FlutterMap(
           mapController: mapController,
           options: MapOptions(
-            initialCenter: LatLng(34.2104, -77.8868),
+            initialCenter:
+                LatLng(widget.position.latitude, widget.position.longitude),
             initialZoom: 9.2,
             onPositionChanged: (position, hasGesture) {
               final zoom = position.zoom;
@@ -109,4 +154,3 @@ class _MyMapState extends State<MyMap> {
     );
   }
 }
-
