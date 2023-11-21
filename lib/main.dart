@@ -12,7 +12,7 @@ import 'package:numenu/services/location_service.dart';
 import 'package:numenu/api/api.dart';
 
 void main() async {
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "DEV.env");
   Position position;
 
   try {

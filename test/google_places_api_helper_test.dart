@@ -7,7 +7,7 @@ void main() {
   group('GooglePlacesApiHelper', () {
     test('Fetches nearby restaurants with default parameters and parses them',
         () async {
-      await dotenv.load(fileName: ".env");
+      await dotenv.load(fileName: "DEV.env");
       // Mocked latitude and longitude for a basic search test
       double latitude = 34.2104;
       double longitude = -77.8868;
