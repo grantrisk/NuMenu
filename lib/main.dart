@@ -8,6 +8,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:numenu/api/api.dart';
 import 'package:numenu/services/location_service.dart';
 import 'package:numenu/views/widgets/animated_data_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() async {
   await dotenv.load(fileName: "DEV.env");
@@ -37,7 +38,9 @@ void main() async {
   final restaurants = await service.getRestaurants(
     latitude: position.latitude,
     longitude: position.longitude,
-    type: RestaurantType.hamburgerRestaurant,
+    type: RestaurantType.iceCreamShop,
+    maxResultCount: 20,
+    radiusInMiles: 3,
   );
 
   // TODO get the lat and long of the businesses
@@ -67,7 +70,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('NuMenu'),
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.amber,
         ),
         body: MyMap(position: position, restaurants: restaurants),
       ),
@@ -100,6 +103,68 @@ class _MyMapState extends State<MyMap> {
     });
   }
 
+  void _showRestaurantInfo(Restaurant restaurant) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  restaurant.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24.0,
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                ListTile(
+                  leading: Icon(Icons.location_on,
+                      color: Theme.of(context).primaryColor),
+                  title: Text('Address'),
+                  subtitle: Text(restaurant.address),
+                  onTap: () async {
+                    var query = Uri.encodeComponent(restaurant.address);
+                    var googleUrl =
+                        "https://www.google.com/maps/search/?api=1&query=$query";
+                    if (await canLaunch(googleUrl)) {
+                      await launch(googleUrl);
+                    } else {
+                      print(
+                          'Could not open the map.'); // Using print to handle the error for now
+                    }
+                  },
+                ),
+                ListTile(
+                  leading:
+                      Icon(Icons.star, color: Theme.of(context).primaryColor),
+                  title: Text('Rating'),
+                  subtitle: Text(restaurant.rating.toString()),
+                ),
+                // ... additional details ...
+                SizedBox(height: 24.0),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('Close'),
+                  // ... button styling ...
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   List<Marker> _createRestaurantMarkers() {
     return widget.restaurants.map((restaurant) {
       return Marker(
@@ -108,12 +173,8 @@ class _MyMapState extends State<MyMap> {
         width: markerSize,
         height: markerSize,
         alignment: Alignment.topCenter,
-        rotate: true,
         child: GestureDetector(
-          onTap: () {
-            print(
-                'Clicked on: ${restaurant.name}, Address: ${restaurant.address}, Rating: ${restaurant.rating}');
-          },
+          onTap: () => _showRestaurantInfo(restaurant),
           child: Container(
             width: markerSize,
             height: markerSize,

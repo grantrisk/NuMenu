@@ -98,6 +98,10 @@ class GooglePlacesApiHelper {
     }
 
     final parsed = json.decode(responseBody);
+    if (parsed['places'] == null) {
+      return [];
+    }
+
     return parsed['places']
         .map<Restaurant>((json) => Restaurant.fromJson(json))
         .toList();

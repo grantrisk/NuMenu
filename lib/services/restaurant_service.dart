@@ -28,7 +28,7 @@ class RestaurantService {
       latitude: latitude,
       longitude: longitude,
       type: type,
-      maxResultCount: 10,
+      maxResultCount: maxResultCount,
       radius: radiusInMeters,
     );
   }
