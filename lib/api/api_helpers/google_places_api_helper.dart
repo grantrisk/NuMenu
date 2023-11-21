@@ -56,13 +56,13 @@ class GooglePlacesApiHelper {
     required double latitude,
     required double longitude,
     required RestaurantType type,
-    int maxResultCount = 10,
-    double radius = 8046.72,
-    String? rating,
+    required int maxResultCount,
+    required double radius,
   }) async {
     final typeString = _getTypeString(type);
-    final fieldMask = 'places.displayName,places.formattedAddress' +
-        (rating != null ? ',places.rating' : '');
+    final fieldMask =
+        'places.displayName,places.formattedAddress,places.rating,places.location';
+    // TODO: cache the placeId? (see https://developers.google.com/maps/documentation/places/web-service/place-id)
 
     Map<String, dynamic> requestBody = {
       'includedTypes': [typeString],

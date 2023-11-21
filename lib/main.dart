@@ -1,15 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 import 'dart:math' as math;
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:geolocator/geolocator.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:numenu/views/widgets/animated_data_view.dart';
-import 'package:numenu/services/location_service.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:numenu/api/api.dart';
+import 'package:numenu/services/location_service.dart';
+import 'package:numenu/views/widgets/animated_data_view.dart';
 
 void main() async {
   await dotenv.load(fileName: "DEV.env");
@@ -17,21 +15,6 @@ void main() async {
 
   try {
     position = await LocationService.getCurrentLocation();
-    final service = RestaurantService();
-    final restaurants = await service.getRestaurants(
-      latitude: position.latitude,
-      longitude: position.longitude,
-      type: RestaurantType.pizzaRestaurant,
-    );
-
-    if (restaurants.isNotEmpty) {
-      print('Fetched ${restaurants.length} restaurants:');
-      for (final restaurant in restaurants) {
-        print('Name: ${restaurant.name}, Address: ${restaurant.address}');
-      }
-    } else {
-      print('No restaurants found.');
-    }
   } catch (e) {
     print('An error occurred: $e');
     // Create a Position object with default values
@@ -49,13 +32,34 @@ void main() async {
     );
   }
 
-  runApp(MyApp(position: position));
+  // Temp...
+  final service = RestaurantService();
+  final restaurants = await service.getRestaurants(
+    latitude: position.latitude,
+    longitude: position.longitude,
+    type: RestaurantType.coffeeShop,
+  );
+
+  // TODO get the lat and long of the businesses
+  if (restaurants.isNotEmpty) {
+    print('Fetched ${restaurants.length} restaurants:');
+    for (final restaurant in restaurants) {
+      print('Name: ${restaurant.name}, Address: ${restaurant.address}, '
+          'Rating: ${restaurant.rating}, Location: ${restaurant.location}');
+    }
+  } else {
+    print('No restaurants found.');
+  }
+
+  runApp(MyApp(position: position, restaurants: restaurants));
 }
 
 class MyApp extends StatelessWidget {
   final Position position;
+  final List<Restaurant> restaurants;
 
-  MyApp({Key? key, required this.position}) : super(key: key);
+  MyApp({Key? key, required this.position, required this.restaurants})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +69,7 @@ class MyApp extends StatelessWidget {
           title: const Text('NuMenu'),
           backgroundColor: Colors.black,
         ),
-        body: MyMap(position: position),
+        body: MyMap(position: position, restaurants: restaurants),
       ),
       theme: ThemeData(
           primaryColor: Colors.black, secondaryHeaderColor: Colors.amber),
@@ -75,8 +79,10 @@ class MyApp extends StatelessWidget {
 
 class MyMap extends StatefulWidget {
   final Position position;
+  final List<Restaurant> restaurants;
 
-  MyMap({Key? key, required this.position}) : super(key: key);
+  MyMap({Key? key, required this.position, required this.restaurants})
+      : super(key: key);
 
   @override
   _MyMapState createState() => _MyMapState();
@@ -84,13 +90,26 @@ class MyMap extends StatefulWidget {
 
 class _MyMapState extends State<MyMap> {
   final MapController mapController = MapController();
-  double markerSize = 80;
+  double markerSize = 16;
 
   void updateMarkerSize(double zoom) {
     setState(() {
-      markerSize = math.min(32, 200 / zoom); // Adjust this formula as needed
+      // Exponential growth formula for the marker size
+      markerSize = math.max(
+          16, math.pow(zoom / 9.2, 2) * 10); // Adjust constants as needed
     });
-    print(markerSize);
+  }
+
+  List<Marker> _createRestaurantMarkers() {
+    return widget.restaurants.map((restaurant) {
+      return Marker(
+        point:
+            LatLng(restaurant.location.latitude, restaurant.location.longitude),
+        width: markerSize,
+        height: markerSize,
+        child: Icon(Icons.location_on, color: Colors.blue, size: markerSize),
+      );
+    }).toList();
   }
 
   @override
@@ -120,17 +139,7 @@ class _MyMapState extends State<MyMap> {
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
               userAgentPackageName: 'com.example.app',
             ),
-            MarkerLayer(
-              markers: [
-                Marker(
-                  point: LatLng(34.2359, -77.9409),
-                  width: markerSize,
-                  height: markerSize,
-                  child: Icon(Icons.location_on,
-                      color: Colors.red, size: markerSize),
-                ),
-              ],
-            ),
+            MarkerLayer(markers: _createRestaurantMarkers()),
           ],
         ),
         /** Child 2: YellowBackground
@@ -149,7 +158,7 @@ class _MyMapState extends State<MyMap> {
          *    searching for restaurants. It will be animated to move up and down
          *    depending on the state of the application.
          */
-        const AnimatedDataView(),
+        // const AnimatedDataView(), // Commented out for now
       ],
     );
   }
