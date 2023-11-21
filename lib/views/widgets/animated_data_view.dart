@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-/// Dart doc strings for this class
-
 /// This class is a widget that displays the food types, search results, and
 /// restaurant information. It will change height depending on the state of the
 /// application (searching, viewing results, viewing restaurant info)
@@ -22,7 +20,10 @@ class _AnimatedDataViewState extends State<AnimatedDataView> {
       bottom: 0,
       child: Container(
         width: MediaQuery.of(context).size.width,
+
+        // TODO: This will be watching the state of the application
         height: (MediaQuery.of(context).size.height / 2),
+
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(

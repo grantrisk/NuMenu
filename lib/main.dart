@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 
 import 'package:numenu/views/widgets/animated_data_view.dart';
+import 'package:numenu/views/widgets/yellow_bg.dart';
+import 'package:numenu/views/widgets/search_bar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,9 +21,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        // TODO: Figure out which options work best for the app
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
-          title: const Text('NuMenu'),
-          backgroundColor: Colors.black,
+          title: const Text(''),
+          backgroundColor: Colors.amber,
         ),
         body: MyMap(),
       ),
@@ -93,11 +97,13 @@ class _MyMapState extends State<MyMap> {
          *     screen is displayed, when the user is selecting a food type, and when
          *     the user is viewing the restaurant info.
          */
+        const YellowBackground(),
 
         /** Child 3: The search results
          *       The third widget is the search bar that is only displayed when the user
          *       is searching for restaurants.
          */
+        const Search(),
 
         /** Child 4: Jumpy White Box (AnimatedDataView)
          *        The fourth widget is the white box that appears when the user is
