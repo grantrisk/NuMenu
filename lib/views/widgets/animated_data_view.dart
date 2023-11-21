@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
-
 /// This class is a widget that displays the food types, search results, and
 /// restaurant information. It will change height depending on the state of the
 /// application (searching, viewing results, viewing restaurant info)

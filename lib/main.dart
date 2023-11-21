@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:math' as math;
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:geolocator/geolocator.dart';
-
 import 'package:numenu/views/widgets/animated_data_view.dart';
 import 'package:numenu/views/widgets/yellow_bg.dart';
 import 'package:numenu/views/widgets/search_bar.dart';
@@ -27,7 +23,7 @@ class MyApp extends StatelessWidget {
           title: const Text(''),
           backgroundColor: Colors.amber,
         ),
-        body: MyMap(),
+        body: const MyMap(),
       ),
       theme: ThemeData(
           primaryColor: Colors.black, secondaryHeaderColor: Colors.amber),
@@ -36,10 +32,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyMap extends StatefulWidget {
-  MyMap({Key? key}) : super(key: key);
+  const MyMap({Key? key}) : super(key: key);
 
   @override
-  _MyMapState createState() => _MyMapState();
+  State<MyMap> createState() => _MyMapState();
 }
 
 class _MyMapState extends State<MyMap> {
@@ -65,7 +61,7 @@ class _MyMapState extends State<MyMap> {
         FlutterMap(
           mapController: mapController,
           options: MapOptions(
-            initialCenter: LatLng(34.2104, -77.8868),
+            initialCenter: const LatLng(34.2104, -77.8868),
             initialZoom: 9.2,
             onPositionChanged: (position, hasGesture) {
               final zoom = position.zoom;
@@ -82,7 +78,7 @@ class _MyMapState extends State<MyMap> {
             MarkerLayer(
               markers: [
                 Marker(
-                  point: LatLng(34.2359, -77.9409),
+                  point: const LatLng(34.2359, -77.9409),
                   width: markerSize,
                   height: markerSize,
                   child: Icon(Icons.location_on,
