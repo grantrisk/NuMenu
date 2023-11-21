@@ -38,7 +38,7 @@ void main() async {
   final restaurants = await service.getRestaurants(
     latitude: position.latitude,
     longitude: position.longitude,
-    type: RestaurantType.iceCreamShop,
+    type: RestaurantType.hamburgerRestaurant,
     maxResultCount: 20,
     radiusInMiles: 3,
   );
@@ -67,11 +67,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
+        /*appBar: AppBar(
           title: const Text('NuMenu'),
           backgroundColor: Colors.amber,
-        ),
+        ),*/
         body: MyMap(position: position, restaurants: restaurants),
       ),
       theme: ThemeData(
