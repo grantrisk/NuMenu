@@ -37,7 +37,7 @@ void main() async {
   final restaurants = await service.getRestaurants(
     latitude: position.latitude,
     longitude: position.longitude,
-    type: RestaurantType.coffeeShop,
+    type: RestaurantType.hamburgerRestaurant,
   );
 
   // TODO get the lat and long of the businesses
@@ -107,13 +107,18 @@ class _MyMapState extends State<MyMap> {
             LatLng(restaurant.location.latitude, restaurant.location.longitude),
         width: markerSize,
         height: markerSize,
+        alignment: Alignment.topCenter,
+        rotate: true,
         child: GestureDetector(
           onTap: () {
             print(
-                'Clicked on: ${restaurant.name}, Address: ${restaurant.address}, '
-                'Rating: ${restaurant.rating}');
+                'Clicked on: ${restaurant.name}, Address: ${restaurant.address}, Rating: ${restaurant.rating}');
           },
-          child: Icon(Icons.location_on, color: Colors.blue, size: markerSize),
+          child: Container(
+            width: markerSize,
+            height: markerSize,
+            child: Image.asset('assets/images/restaurant_marker.png'),
+          ),
         ),
       );
     }).toList();
