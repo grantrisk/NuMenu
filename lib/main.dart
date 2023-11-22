@@ -1,3 +1,4 @@
+import 'package:binder/binder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -15,18 +16,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        // TODO: Figure out which options work best for the app
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          title: const Text(''),
-          backgroundColor: Colors.amber,
+    return BinderScope(
+      child: MaterialApp(
+        home: Scaffold(
+          // TODO: Figure out which options work best for the app
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            backgroundColor: Colors.amber,
+          ),
+          body: const MyMap(),
         ),
-        body: const MyMap(),
+        theme: ThemeData(
+            primaryColor: Colors.black, secondaryHeaderColor: Colors.amber),
       ),
-      theme: ThemeData(
-          primaryColor: Colors.black, secondaryHeaderColor: Colors.amber),
     );
   }
 }
