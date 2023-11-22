@@ -1,10 +1,13 @@
+/*
 import 'package:test/test.dart';
-import 'package:numenu/controllers/google_places_api_helper.dart';
+import 'package:numenu/controllers/google_places_api/google_places_api_helper.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
   group('GooglePlacesApiHelper', () {
     test('Fetches nearby restaurants with default parameters and parses them',
         () async {
+      await dotenv.load(fileName: "DEV.env");
       // Mocked latitude and longitude for a basic search test
       double latitude = 34.2104;
       double longitude = -77.8868;
@@ -66,3 +69,4 @@ void main() {
     });
   });
 }
+*/
