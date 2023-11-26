@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
+import 'package:provider/provider.dart';
+
+import '../../state_management/global_state_service.dart';
 
 /// Dart doc strings for this class
 
@@ -7,47 +9,107 @@ import 'dart:math' as math;
 /// restaurant information. It will change height depending on the state of the
 /// application (searching, viewing results, viewing restaurant info)
 
-class AnimatedDataView extends StatefulWidget {
+class AnimatedDataView extends StatelessWidget {
   const AnimatedDataView({super.key});
 
   @override
-  State<AnimatedDataView> createState() => _AnimatedDataViewState();
-}
-
-class _AnimatedDataViewState extends State<AnimatedDataView> {
-
-  @override
   Widget build(BuildContext context) {
+    double determineHeight(AppState state) {
+      switch (state) {
+        case AppState.viewingFoodTypes:
+          return MediaQuery.of(context).size.height / 1.25;
+        case AppState.viewingRestaurantResults:
+          return MediaQuery.of(context).size.height / 1.9;
+        case AppState.viewingRestaurantInfo:
+          return 0;
+        case AppState.viewingMap:
+          return MediaQuery.of(context).size.height / 2;
+        case AppState.loading:
+          return 0;
+        case AppState.init:
+          return MediaQuery.of(context).size.height / 1.2;
+        case AppState.minimizedDataView:
+          return MediaQuery.of(context).size.height / 10;
+        default:
+          return 0;
+      }
+    }
+
     return Positioned(
       bottom: 0,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: (MediaQuery.of(context).size.height / 2),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 20.0,
-              spreadRadius: 5.0,
-              offset: const Offset(10, -5),
-            ),
-          ],
+      child: Consumer<GlobalStateService>(
+        builder: (context, state, child) => AnimatedContainer(
+          duration: const Duration(milliseconds: 800),
+          curve: state.state == AppState.viewingRestaurantResults ||
+                  state.state == AppState.minimizedDataView
+              ? Curves.fastEaseInToSlowEaseOut
+              : Curves.fastLinearToSlowEaseIn,
+          width: MediaQuery.of(context).size.width,
+          height: determineHeight(
+              Provider.of<GlobalStateService>(context, listen: false).state),
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 8,
+                spreadRadius: 5.0,
+                offset: const Offset(0, 0),
+              ),
+            ],
             color: Colors.white,
             borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(80), topRight: Radius.circular(80),
+              topLeft: Radius.circular(80),
+              topRight: Radius.circular(80),
             ),
-        ),
-        child: const Center(
-          child: Row(
-            // Add two buttons
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              ElevatedButton(onPressed: null, child: Text('Previous State')),
-              ElevatedButton(onPressed: null, child: Text('Next State')),
-            ],
+          ),
+          child: Center(
+            child: Column(
+              children: [
+                // Add a text widget
+                Consumer<GlobalStateService>(
+                  builder: (context, state, child) {
+                    return Text(
+                      state.state.toString(),
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  },
+                ),
+                Row(
+                  // Add two buttons
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    IconButton(
+                        onPressed: () => {
+                              Provider.of<GlobalStateService>(context,
+                                      listen: false)
+                                  .changeStateTo(
+                                      AppState.viewingFoodTypes)
+                            },
+                        icon: const Icon(Icons.arrow_back)),
+                    IconButton(
+                        onPressed: () => {
+                          Provider.of<GlobalStateService>(context,
+                              listen: false)
+                              .changeStateTo(
+                              AppState.minimizedDataView)
+                            },
+                        icon: const Icon(Icons.close)),
+                    ElevatedButton(
+                        onPressed: () => {
+                              Provider.of<GlobalStateService>(context,
+                                      listen: false)
+                                  .changeStateTo(AppState.viewingRestaurantResults)
+                            },
+                        child: const Text('View Restaurant Details')),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-
       ),
     );
   }

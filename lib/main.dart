@@ -7,7 +7,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:numenu/api/api.dart';
 import 'package:numenu/services/location_service.dart';
+import 'package:numenu/state_management/global_state_service.dart';
 import 'package:numenu/views/widgets/animated_data_view.dart';
+import 'package:numenu/views/widgets/search_bar.dart';
+import 'package:numenu/views/widgets/yellow_bg.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() async {
@@ -34,6 +38,7 @@ void main() async {
   }
 
   // Temp...
+  // TODO: Make this callable by the state controller
   final service = RestaurantService();
   final restaurants = await service.getRestaurants(
     latitude: position.latitude,
@@ -54,7 +59,11 @@ void main() async {
     print('No restaurants found.');
   }
 
-  runApp(MyApp(position: position, restaurants: restaurants));
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_) => GlobalStateService()),
+    ], child: MyApp(position: position, restaurants: restaurants)),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -68,7 +77,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+       // Prevents the bottom overflow error when the keyboard is open
       home: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: MediaQuery.of(context).size.height * 0.01,
+          backgroundColor: Colors.amber,
+        ),
+        resizeToAvoidBottomInset: false,
         /*appBar: AppBar(
           title: const Text('NuMenu'),
           backgroundColor: Colors.amber,
@@ -189,6 +204,7 @@ class _MyMapState extends State<MyMap> {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      alignment: AlignmentDirectional.topCenter,
       children: <Widget>[
         /** Child 1: The map itself
          *      The first is the deepest in the stack, so it will be the bottom-most
@@ -216,23 +232,21 @@ class _MyMapState extends State<MyMap> {
             MarkerLayer(markers: _createRestaurantMarkers()),
           ],
         ),
-        /** Child 2: YellowBackground
-         *       The second widget is the yellow background that appears when the splash
-         *     screen is displayed, when the user is selecting a food type, and when
-         *     the user is viewing the restaurant info.
-         */
+        const YellowBg(),
 
-        /** Child 3: The search results
-         *       The third widget is the search bar that is only displayed when the user
-         *       is searching for restaurants.
-         */
+        const MySearchBar(),
 
         /** Child 4: Jumpy White Box (AnimatedDataView)
          *        The fourth widget is the white box that appears when the user is
          *    searching for restaurants. It will be animated to move up and down
          *    depending on the state of the application.
          */
-        // const AnimatedDataView(), // Commented out for now
+        Consumer<GlobalStateService>(
+          builder: (context, state, child) {
+            return const AnimatedDataView(
+            );
+          },
+        ),
       ],
     );
   }
