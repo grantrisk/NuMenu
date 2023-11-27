@@ -20,6 +20,7 @@ void main() async {
 
   try {
     position = await LocationService.getCurrentLocation();
+    print('Current location: ${position.latitude}, ${position.longitude}');
   } catch (e) {
     print('An error occurred: $e');
     // Create a Position object with default values
@@ -61,6 +62,7 @@ void main() async {
 
   runApp(
     MultiProvider(providers: [
+      // TODO: Create a param for state service called restaurants
       ChangeNotifierProvider(create: (_) => GlobalStateService()),
     ], child: MyApp(position: position, restaurants: restaurants)),
   );
