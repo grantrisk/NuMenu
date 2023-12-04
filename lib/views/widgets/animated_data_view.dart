@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:numenu/views/widgets/food_type_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../state_management/global_state_service.dart';
@@ -50,7 +51,7 @@ class AnimatedDataView extends StatelessWidget {
             }
           },
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 800),
+            duration: const Duration(milliseconds: 400),
             // TODO: Abstract into the controller
             curve: state.state == AppState.viewingRestaurantResults ||
                     state.state == AppState.minimizedDataView
@@ -77,30 +78,18 @@ class AnimatedDataView extends StatelessWidget {
             child: Center(
               child: Column(
                 children: [
-                  // Add a text widget
-                  Consumer<GlobalStateService>(
-                    builder: (context, state, child) {
-                      return Text(
-                        state.state.toString(),
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    },
-                  ),
                   Row(
                     // Add two buttons
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       IconButton(
-                          onPressed: () => {
-                                Provider.of<GlobalStateService>(context,
-                                        listen: false)
-                                    .changeStateTo(
-                                        AppState.viewingFoodTypes)
-                              },
-                          icon: const Icon(Icons.arrow_back)),
+                            onPressed: () => {
+                                  Provider.of<GlobalStateService>(context,
+                                          listen: false)
+                                      .changeStateTo(
+                                          AppState.viewingFoodTypes)
+                                },
+                            icon: const Icon(Icons.arrow_back)),
                       IconButton(
                           onPressed: () => {
                             Provider.of<GlobalStateService>(context,
@@ -109,15 +98,9 @@ class AnimatedDataView extends StatelessWidget {
                                 AppState.minimizedDataView)
                               },
                           icon: const Icon(Icons.close)),
-                      ElevatedButton(
-                          onPressed: () => {
-                                Provider.of<GlobalStateService>(context,
-                                        listen: false)
-                                    .changeStateTo(AppState.viewingRestaurantResults)
-                              },
-                          child: const Text('View Restaurant Details')),
                     ],
                   ),
+                    FoodTypeView(),
                 ],
               ),
             ),

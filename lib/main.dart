@@ -81,10 +81,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
        // Prevents the bottom overflow error when the keyboard is open
       home: Scaffold(
-        appBar: AppBar(
-          toolbarHeight: MediaQuery.of(context).size.height * 0.01,
-          backgroundColor: Colors.amber,
-        ),
+        // appBar: AppBar(
+        //   toolbarHeight: MediaQuery.of(context).size.height * 0.01,
+        //   backgroundColor: const Color.fromARGB(255, 251, 181, 29),
+        // ),
         resizeToAvoidBottomInset: false,
         /*appBar: AppBar(
           title: const Text('NuMenu'),

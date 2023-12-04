@@ -13,13 +13,12 @@ class YellowBg extends StatelessWidget {
         child: Align(
           alignment: Alignment.topCenter,
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 650),
-            curve: state.state == AppState.viewingRestaurantResults || state.state == AppState.minimizedDataView ? Curves.fastEaseInToSlowEaseOut : Curves.easeOut,
-            height: state.state == AppState.viewingRestaurantResults || state.state == AppState.minimizedDataView ? 0 : MediaQuery.of(context).size.height,
+            duration: const Duration(milliseconds: 200),
+            curve: state.state == AppState.viewingRestaurantResults || state.state == AppState.minimizedDataView ? Curves.ease : Curves.ease,
+            height: state.state == AppState.viewingRestaurantResults || state.state == AppState.minimizedDataView ? MediaQuery.of(context).size.height / 20 : MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.amber,
-              borderRadius: BorderRadius.circular(5)
+            decoration: const BoxDecoration(
+              color: Color.fromARGB(255, 251, 181, 29),
             ),
           ),
         ),

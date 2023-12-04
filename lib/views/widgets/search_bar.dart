@@ -12,10 +12,10 @@ class MySearchBar extends StatelessWidget {
       builder: (context, state, child) => Stack(
         children: [
             Positioned(
-              top: MediaQuery.of(context).size.width * 0.1,
+              top: MediaQuery.of(context).size.width * 0.2,
               left: MediaQuery.of(context).size.width * 0.05,
               child: AnimatedContainer(
-                duration: state.state == AppState.viewingRestaurantResults || state.state == AppState.minimizedDataView ? const Duration(milliseconds: 1200) : const Duration(milliseconds: 200),
+                duration: state.state == AppState.viewingRestaurantResults || state.state == AppState.minimizedDataView ? const Duration(milliseconds: 200) : const Duration(milliseconds: 200),
                 curve:state.state == AppState.viewingRestaurantResults || state.state == AppState.minimizedDataView ? Curves.fastEaseInToSlowEaseOut : Curves.easeOut,
                 height: 40,
                 width: MediaQuery.of(context).size.width * 0.9,
@@ -27,17 +27,17 @@ class MySearchBar extends StatelessWidget {
             ),
           Positioned(
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 700),
+              duration: const Duration(milliseconds: 200),
               curve: Curves.fastEaseInToSlowEaseOut,
               height: 40,
               width: MediaQuery.of(context).size.width,
               margin: EdgeInsets.fromLTRB(
                   MediaQuery.of(context).size.width * 0.05,
-                  MediaQuery.of(context).size.width * 0.1,
+                  MediaQuery.of(context).size.width * 0.2,
                   MediaQuery.of(context).size.width * 0.05,
                   0),
               decoration: BoxDecoration(
-                color: state.state == AppState.viewingRestaurantResults || state.state == AppState.minimizedDataView ? const Color.fromARGB(100, 251, 181, 29) : Colors.black.withOpacity(0.15),
+                color: state.state == AppState.viewingRestaurantResults || state.state == AppState.minimizedDataView ? const Color.fromARGB(160, 251, 181, 29) : Colors.black.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: TextField(
