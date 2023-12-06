@@ -14,18 +14,24 @@ class FoodTypeView extends StatelessWidget {
         if (state.state == AppState.viewingFoodTypes) {
           return Padding(
             padding: EdgeInsets.fromLTRB(
-                MediaQuery.of(context).size.width * 0.05,
-                MediaQuery.of(context).size.width * 0.2,
-                MediaQuery.of(context).size.width * 0.05,
-                0),
-            child: Container(
-              height: MediaQuery.of(context).size.height / 2,
-              width: MediaQuery.of(context).size.width,
-              child: ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return FoodTypeButton(buttonText: items[index]);
-                },
+              MediaQuery.of(context).size.width * 0.05,
+              MediaQuery.of(context).size.width * 0.2,
+              MediaQuery.of(context).size.width * 0.05,
+              0,
+            ),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      return FoodTypeButton(buttonText: items[index]);
+                    },
+                  ),
+                ],
               ),
             ),
           );

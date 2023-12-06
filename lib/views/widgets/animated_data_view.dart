@@ -42,6 +42,11 @@ class AnimatedDataView extends StatelessWidget {
       child: Consumer<GlobalStateService>(
         builder: (context, state, child) => GestureDetector(
           onVerticalDragUpdate: (details) {
+            // if the app state is not viewing restaurant results, return
+            if (state.state != AppState.viewingRestaurantResults) {
+              return;
+            }
+
             if (details.delta.dy > 0) {
               Provider.of<GlobalStateService>(context, listen: false)
                   .changeStateTo(AppState.minimizedDataView);
@@ -82,22 +87,28 @@ class AnimatedDataView extends StatelessWidget {
                     // Add two buttons
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      IconButton(
+                      Padding(
+                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05, top: MediaQuery.of(context).size.width * 0.05),
+                        child: IconButton(
+                              onPressed: () => {
+                                    Provider.of<GlobalStateService>(context,
+                                            listen: false)
+                                        .changeStateTo(
+                                            AppState.viewingFoodTypes)
+                                  },
+                              icon: const Icon(Icons.arrow_back)),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.05, top: MediaQuery.of(context).size.width * 0.05),
+                        child: IconButton(
                             onPressed: () => {
-                                  Provider.of<GlobalStateService>(context,
-                                          listen: false)
-                                      .changeStateTo(
-                                          AppState.viewingFoodTypes)
+                              Provider.of<GlobalStateService>(context,
+                                  listen: false)
+                                  .changeStateTo(
+                                  AppState.minimizedDataView)
                                 },
-                            icon: const Icon(Icons.arrow_back)),
-                      IconButton(
-                          onPressed: () => {
-                            Provider.of<GlobalStateService>(context,
-                                listen: false)
-                                .changeStateTo(
-                                AppState.minimizedDataView)
-                              },
-                          icon: const Icon(Icons.close)),
+                            icon: const Icon(Icons.close)),
+                      ),
                     ],
                   ),
                     FoodTypeView(),
