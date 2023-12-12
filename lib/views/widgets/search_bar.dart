@@ -32,7 +32,7 @@ class MySearchBar extends StatelessWidget {
             ),
             Positioned(
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 50),
+                duration: const Duration(milliseconds: 350),
                 curve: Curves.linear,
                 height: 40,
                 width: MediaQuery.of(context).size.width,
@@ -54,7 +54,8 @@ class MySearchBar extends StatelessWidget {
                     hintText: 'Search Restaurants',
                     hintStyle: const TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
                     ),
                     counterText: "",
                     contentPadding: EdgeInsets.symmetric(

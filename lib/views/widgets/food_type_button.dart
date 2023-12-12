@@ -9,45 +9,46 @@ class FoodTypeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // write a void function that changes the state to viewingRestaurantResults
-
     void changeStateToViewingRestaurantResults() {
       Provider.of<GlobalStateService>(context, listen: false)
           .changeStateTo(AppState.viewingRestaurantResults);
     }
 
+    var screenWidth = MediaQuery.of(context).size.width;
+    var screenHeight = MediaQuery.of(context).size.height;
+
+    var buttonWidth = screenWidth * 0.05;
+    var buttonHeight = screenHeight * 0.055;
+
     return GestureDetector(
       onTap: () {
         changeStateToViewingRestaurantResults();
       },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          width: 50,
-          height: 40,
+      child: Container(
+          width: buttonWidth,
+          height: buttonHeight,
           decoration: BoxDecoration(
             color: const Color.fromARGB(255, 251, 181, 29),
             borderRadius: BorderRadius.circular(10.0),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.2),
+                color: Colors.black.withOpacity(0.25),
                 blurRadius: 6.0,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
           child: Center(
             child: Text(
               buttonText,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
         ),
-      ),
     );
   }
 }

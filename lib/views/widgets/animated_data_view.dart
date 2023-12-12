@@ -99,7 +99,7 @@ class AnimatedDataView extends StatelessWidget {
                               icon: const Icon(Icons.arrow_back)),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.05, top: MediaQuery.of(context).size.width * 0.05),
+                        padding: EdgeInsets.only(right  : MediaQuery.of(context).size.width * 0.05, top: MediaQuery.of(context).size.width * 0.05),
                         child: IconButton(
                             onPressed: () => {
                               Provider.of<GlobalStateService>(context,
@@ -111,7 +111,7 @@ class AnimatedDataView extends StatelessWidget {
                       ),
                     ],
                   ),
-                    FoodTypeView(),
+                    const FoodTypeView(),
                 ],
               ),
             ),

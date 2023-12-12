@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:numenu/api/api.dart';
 import 'package:numenu/services/location_service.dart';
@@ -63,7 +64,7 @@ void main() async {
   runApp(
     MultiProvider(providers: [
       // TODO: Create a param for state service called restaurants
-      ChangeNotifierProvider(create: (_) => GlobalStateService()),
+      ChangeNotifierProvider(create: (_) => GlobalStateService(restaurants: restaurants)),
     ], child: MyApp(position: position, restaurants: restaurants)),
   );
 }
@@ -93,6 +94,7 @@ class MyApp extends StatelessWidget {
         body: MyMap(position: position, restaurants: restaurants),
       ),
       theme: ThemeData(
+        fontFamily: 'Montserrat',
           primaryColor: Colors.black, secondaryHeaderColor: Colors.amber),
     );
   }
