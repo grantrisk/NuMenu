@@ -28,6 +28,11 @@ enum AppState {
 
 /// The only component that can change the state of the application.
 class GlobalStateService extends ChangeNotifier {
+  GlobalStateService({required this.restaurants});
+
+  final List<Restaurant> restaurants;
+
+
   AppState _state = AppState.init;
   // TODO: map of restaurants from api
 

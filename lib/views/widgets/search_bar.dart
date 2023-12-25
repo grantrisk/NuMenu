@@ -23,17 +23,15 @@ class MySearchBar extends StatelessWidget {
                 height: 40,
                 width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
-                  color: state.state == AppState.viewingRestaurantResults || state.state == AppState.minimizedDataView
-                      ? Colors.black12
-                      : Colors.transparent,
+                  color: Colors.black12,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ),
             Positioned(
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 350),
-                curve: Curves.linear,
+                duration: const Duration(milliseconds: 700),
+                curve: Curves.fastEaseInToSlowEaseOut,
                 height: 40,
                 width: MediaQuery.of(context).size.width,
                 margin: EdgeInsets.fromLTRB(
@@ -45,7 +43,7 @@ class MySearchBar extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: state.state == AppState.viewingRestaurantResults || state.state == AppState.minimizedDataView
                       ? const Color.fromARGB(160, 251, 181, 29)
-                      : Colors.black.withOpacity(0.15),
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextField(

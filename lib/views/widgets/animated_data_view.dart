@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:numenu/views/widgets/back_and_close_buttons.dart';
 import 'package:numenu/views/widgets/food_type_view.dart';
 import 'package:provider/provider.dart';
 
@@ -80,42 +81,25 @@ class AnimatedDataView extends StatelessWidget {
                 topRight: Radius.circular(80),
               ),
             ),
-            child: Center(
-              child: Column(
-                children: [
-                  Row(
-                    // Add two buttons
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05, top: MediaQuery.of(context).size.width * 0.05),
-                        child: IconButton(
-                              onPressed: () => {
-                                    Provider.of<GlobalStateService>(context,
-                                            listen: false)
-                                        .changeStateTo(
-                                            AppState.viewingFoodTypes)
-                                  },
-                              icon: const Icon(Icons.arrow_back)),
+            child: const SingleChildScrollView(
+              physics: NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              child: Center(
+                  child: Column(
+                    children: [
+                      Row(
+                        // Add two buttons
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          BackAndCloseButtons(),
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(right  : MediaQuery.of(context).size.width * 0.05, top: MediaQuery.of(context).size.width * 0.05),
-                        child: IconButton(
-                            onPressed: () => {
-                              Provider.of<GlobalStateService>(context,
-                                  listen: false)
-                                  .changeStateTo(
-                                  AppState.minimizedDataView)
-                                },
-                            icon: const Icon(Icons.close)),
-                      ),
+                       FoodTypeView()
                     ],
                   ),
-                    const FoodTypeView(),
-                ],
-              ),
+                ),
             ),
-          ),
+            ),
         ),
       ),
     );
