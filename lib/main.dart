@@ -19,7 +19,6 @@ void main() async {
   await dotenv.load(fileName: "DEV.env");
   Position position;
 
-  // TODO add back after cullin fixes his location problem
   try {
     position = await LocationService.getCurrentLocation();
     print('Current location: ${position.latitude}, ${position.longitude}');
@@ -42,6 +41,7 @@ void main() async {
 
   // Temp...
   // TODO: Make this callable by the state controller
+  // TODO revert back after cullin fixes his location problem so the lat and long arent hard coded
   final service = RestaurantService();
   final restaurants = await service.getRestaurants(
     latitude: 34.2104,
@@ -65,7 +65,8 @@ void main() async {
   runApp(
     MultiProvider(providers: [
       // TODO: Create a param for state service called restaurants
-      ChangeNotifierProvider(create: (_) => GlobalStateService(restaurants: restaurants)),
+      ChangeNotifierProvider(
+          create: (_) => GlobalStateService(restaurants: restaurants)),
     ], child: MyApp(position: position, restaurants: restaurants)),
   );
 }
@@ -81,7 +82,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-       // Prevents the bottom overflow error when the keyboard is open
+      // Prevents the bottom overflow error when the keyboard is open
       home: Scaffold(
         // appBar: AppBar(
         //   toolbarHeight: MediaQuery.of(context).size.height * 0.01,
@@ -91,8 +92,9 @@ class MyApp extends StatelessWidget {
         body: MyMap(position: position, restaurants: restaurants),
       ),
       theme: ThemeData(
-        fontFamily: 'Montserrat',
-          primaryColor: Colors.black, secondaryHeaderColor: Colors.amber),
+          fontFamily: 'Montserrat',
+          primaryColor: Colors.black,
+          secondaryHeaderColor: Colors.amber),
     );
   }
 }
@@ -112,10 +114,12 @@ class _MyMapState extends State<MyMap> {
   final MapController mapController = MapController();
   Timer? _debounce;
   double markerSize = 16;
+  List<Restaurant> restaurants = [];
 
   @override
   void initState() {
     super.initState();
+    restaurants = widget.restaurants; // Initialize with initial restaurants
   }
 
   @override
@@ -130,7 +134,8 @@ class _MyMapState extends State<MyMap> {
       _debounce = Timer(const Duration(seconds: 2), () {
         // Ensure the position center is not null
         if (position.center != null) {
-          _loadRestaurants(position.center!); // Use the '!' operator to cast LatLng? to LatLng
+          _loadRestaurants(position
+              .center!); // Use the '!' operator to cast LatLng? to LatLng
         }
       });
     }
@@ -138,7 +143,7 @@ class _MyMapState extends State<MyMap> {
 
   Future<void> _loadRestaurants(LatLng center) async {
     final service = RestaurantService();
-    final restaurants = await service.getRestaurants(
+    final newRestaurants = await service.getRestaurants(
       latitude: center.latitude,
       longitude: center.longitude,
       type: RestaurantType.hamburgerRestaurant,
@@ -146,16 +151,37 @@ class _MyMapState extends State<MyMap> {
       radiusInMiles: 3,
     );
 
-    // TODO get the lat and long of the businesses
+    // Update state with the new restaurants
+    setState(() {
+      restaurants = newRestaurants;
+    });
+
+    // Logging for debugging
     if (restaurants.isNotEmpty) {
-      print('Fetched ${restaurants.length} restaurants after moving:');
-      /*for (final restaurant in restaurants) {
-      print('Name: ${restaurant.name}, Address: ${restaurant.address}, '
-          'Rating: ${restaurant.rating}, Location: ${restaurant.location}');
-    }*/
+      print('Fetched ${restaurants.length} restaurants after moving.');
     } else {
       print('No restaurants found after moving.');
     }
+  }
+
+  List<Marker> _createRestaurantMarkers() {
+    return restaurants.map((restaurant) {
+      return Marker(
+        point:
+            LatLng(restaurant.location.latitude, restaurant.location.longitude),
+        width: markerSize,
+        height: markerSize,
+        alignment: Alignment.topCenter,
+        child: GestureDetector(
+          onTap: () => _showRestaurantInfo(restaurant),
+          child: Container(
+            width: markerSize,
+            height: markerSize,
+            child: Image.asset('assets/images/restaurant_marker.png'),
+          ),
+        ),
+      );
+    }).toList();
   }
 
   void updateMarkerSize(double zoom) {
@@ -228,26 +254,6 @@ class _MyMapState extends State<MyMap> {
     );
   }
 
-  List<Marker> _createRestaurantMarkers() {
-    return widget.restaurants.map((restaurant) {
-      return Marker(
-        point:
-            LatLng(restaurant.location.latitude, restaurant.location.longitude),
-        width: markerSize,
-        height: markerSize,
-        alignment: Alignment.topCenter,
-        child: GestureDetector(
-          onTap: () => _showRestaurantInfo(restaurant),
-          child: Container(
-            width: markerSize,
-            height: markerSize,
-            child: Image.asset('assets/images/restaurant_marker.png'),
-          ),
-        ),
-      );
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -281,7 +287,6 @@ class _MyMapState extends State<MyMap> {
           ],
         ),
         const YellowBg(),
-
         const MySearchBar(),
 
         /** Child 4: Jumpy White Box (AnimatedDataView)
@@ -291,8 +296,7 @@ class _MyMapState extends State<MyMap> {
          */
         Consumer<GlobalStateService>(
           builder: (context, state, child) {
-            return const AnimatedDataView(
-            );
+            return const AnimatedDataView();
           },
         ),
       ],
