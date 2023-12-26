@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -18,6 +19,7 @@ void main() async {
   await dotenv.load(fileName: "DEV.env");
   Position position;
 
+  // TODO add back after cullin fixes his location problem
   try {
     position = await LocationService.getCurrentLocation();
     print('Current location: ${position.latitude}, ${position.longitude}');
@@ -42,8 +44,8 @@ void main() async {
   // TODO: Make this callable by the state controller
   final service = RestaurantService();
   final restaurants = await service.getRestaurants(
-    latitude: position.latitude,
-    longitude: position.longitude,
+    latitude: 34.2104,
+    longitude: -77.8868,
     type: RestaurantType.hamburgerRestaurant,
     maxResultCount: 20,
     radiusInMiles: 3,
@@ -108,7 +110,53 @@ class MyMap extends StatefulWidget {
 
 class _MyMapState extends State<MyMap> {
   final MapController mapController = MapController();
+  Timer? _debounce;
   double markerSize = 16;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void _onMapPositionChange(MapPosition position, bool hasGesture) {
+    if (hasGesture) {
+      if (_debounce?.isActive ?? false) _debounce?.cancel();
+      _debounce = Timer(const Duration(seconds: 2), () {
+        // Ensure the position center is not null
+        if (position.center != null) {
+          _loadRestaurants(position.center!); // Use the '!' operator to cast LatLng? to LatLng
+        }
+      });
+    }
+  }
+
+  Future<void> _loadRestaurants(LatLng center) async {
+    final service = RestaurantService();
+    final restaurants = await service.getRestaurants(
+      latitude: center.latitude,
+      longitude: center.longitude,
+      type: RestaurantType.hamburgerRestaurant,
+      maxResultCount: 20,
+      radiusInMiles: 3,
+    );
+
+    // TODO get the lat and long of the businesses
+    if (restaurants.isNotEmpty) {
+      print('Fetched ${restaurants.length} restaurants after moving:');
+      /*for (final restaurant in restaurants) {
+      print('Name: ${restaurant.name}, Address: ${restaurant.address}, '
+          'Rating: ${restaurant.rating}, Location: ${restaurant.location}');
+    }*/
+    } else {
+      print('No restaurants found after moving.');
+    }
+  }
 
   void updateMarkerSize(double zoom) {
     setState(() {
@@ -221,6 +269,7 @@ class _MyMapState extends State<MyMap> {
               if (zoom != null) {
                 updateMarkerSize(zoom);
               }
+              _onMapPositionChange(position, hasGesture);
             },
           ),
           children: [
