@@ -86,10 +86,6 @@ class MyApp extends StatelessWidget {
         //   backgroundColor: const Color.fromARGB(255, 251, 181, 29),
         // ),
         resizeToAvoidBottomInset: false,
-        /*appBar: AppBar(
-          title: const Text('NuMenu'),
-          backgroundColor: Colors.amber,
-        ),*/
         body: MyMap(position: position, restaurants: restaurants),
       ),
       theme: ThemeData(
@@ -140,7 +136,7 @@ class _MyMapState extends State<MyMap> {
               children: <Widget>[
                 Text(
                   restaurant.name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 24.0,
                   ),

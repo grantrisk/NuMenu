@@ -85,21 +85,12 @@ class AnimatedDataView extends StatelessWidget {
               physics: NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
               child: Center(
-                  child: Column(
-                    children: [
-                      Row(
-                        // Add two buttons
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          BackAndCloseButtons(),
-                        ],
-                      ),
-                       FoodTypeView()
-                    ],
-                  ),
+                child: Column(
+                  children: [BackAndCloseButtons(), FoodTypeView()],
                 ),
+              ),
             ),
-            ),
+          ),
         ),
       ),
     );
