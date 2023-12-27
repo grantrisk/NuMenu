@@ -17,9 +17,7 @@ class MySearchBar extends StatelessWidget {
               left: MediaQuery.of(context).size.width * 0.05,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 50),
-                curve: state.state == AppState.viewingRestaurantResults || state.state == AppState.minimizedDataView
-                    ? Curves.linear
-                    : Curves.linear,
+                curve: Curves.fastEaseInToSlowEaseOut,
                 height: 40,
                 width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
@@ -30,7 +28,7 @@ class MySearchBar extends StatelessWidget {
             ),
             Positioned(
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 700),
+                duration: const Duration(milliseconds: 500),
                 curve: Curves.fastEaseInToSlowEaseOut,
                 height: 40,
                 width: MediaQuery.of(context).size.width,

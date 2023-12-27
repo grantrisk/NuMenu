@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:numenu/views/widgets/back_and_close_buttons.dart';
 import 'package:numenu/views/widgets/food_type_view.dart';
+import 'package:numenu/views/widgets/restaurant_card.dart';
 import 'package:provider/provider.dart';
 
 import '../../state_management/global_state_service.dart';
@@ -70,23 +72,23 @@ class AnimatedDataView extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
-                  blurRadius: 8,
-                  spreadRadius: 5.0,
+                  blurRadius: 20,
+                  spreadRadius: 10.0,
                   offset: const Offset(0, 0),
                 ),
               ],
               color: Colors.white,
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(80),
-                topRight: Radius.circular(80),
+                topLeft: Radius.circular(65),
+                topRight: Radius.circular(65),
               ),
             ),
-            child: const SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
               child: Center(
                 child: Column(
-                  children: [BackAndCloseButtons(), FoodTypeView()],
+                  children: [const BackAndCloseButtons(), determineViewVisibility(state.state)],
                 ),
               ),
             ),
@@ -94,5 +96,26 @@ class AnimatedDataView extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Widget determineViewVisibility(AppState state) {
+  switch (state) {
+    case AppState.viewingFoodTypes:
+      return const FoodTypeView();
+    case AppState.viewingRestaurantResults:
+      return RestaurantCard(resName: 'McDonalds', address: '1234 McDonalds Ln', rating: 5, latLng: const LatLng(0, 0));
+    case AppState.viewingRestaurantInfo:
+      return Container();
+    case AppState.viewingMap:
+      return Container();
+    case AppState.loading:
+      return Container();
+    case AppState.init:
+      return Container();
+    case AppState.minimizedDataView:
+      return Container();
+    default:
+      return Container();
   }
 }

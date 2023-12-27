@@ -32,17 +32,19 @@ class GlobalStateService extends ChangeNotifier {
 
   final List<Restaurant> restaurants;
 
+  late GeneralRestaurantType restaurantType;
 
   AppState _state = AppState.init;
   // TODO: map of restaurants from api
 
-  // map of string to restaurantType
-  Map<String, RestaurantType?> restaurantDetails = {
-    "restaurantTypeSelected": null,
-    "restaurantList": null,
-  };
-
   AppState get state => _state;
+
+  String get currentRestaurantType => restaurantType.name;
+
+  void changeRestaurantTypeTo(GeneralRestaurantType type) {
+    restaurantType = type;
+    notifyListeners();
+  }
 
   /// Sets the state of the application
   ///

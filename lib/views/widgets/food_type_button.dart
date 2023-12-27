@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:numenu/api/api.dart';
 import 'package:numenu/state_management/global_state_service.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,40 @@ class FoodTypeButton extends StatelessWidget {
           .changeStateTo(AppState.viewingRestaurantResults);
     }
 
+    void setRestaurantType(buttonText) {
+      switch (buttonText) {
+        case 'MEXICAN':
+          Provider.of<GlobalStateService>(context, listen: false)
+              .changeRestaurantTypeTo(GeneralRestaurantType.mexican);
+          print('mexican');
+          break;
+        case 'ITALIAN':
+          Provider.of<GlobalStateService>(context, listen: false)
+              .changeRestaurantTypeTo(GeneralRestaurantType.italian);
+          break;
+        case 'AMERICAN':
+          Provider.of<GlobalStateService>(context, listen: false)
+              .changeRestaurantTypeTo(GeneralRestaurantType.american);
+          break;
+        case 'ASIAN':
+          Provider.of<GlobalStateService>(context, listen: false)
+              .changeRestaurantTypeTo(GeneralRestaurantType.asian);
+          break;
+        case 'MEDITERRANEAN':
+          Provider.of<GlobalStateService>(context, listen: false)
+              .changeRestaurantTypeTo(GeneralRestaurantType.mediterranean);
+          break;
+        case 'SOMETHING, IM HUNGRY':
+          Provider.of<GlobalStateService>(context, listen: false)
+              .changeRestaurantTypeTo(GeneralRestaurantType.any);
+          break;
+        default:
+          Provider.of<GlobalStateService>(context, listen: false)
+              .changeRestaurantTypeTo(GeneralRestaurantType.any);
+
+      }
+    }
+
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
 
@@ -23,6 +58,7 @@ class FoodTypeButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         changeStateToViewingRestaurantResults();
+        setRestaurantType(buttonText);
       },
       child: Container(
           width: buttonWidth,
