@@ -3,6 +3,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:numenu/views/widgets/back_and_close_buttons.dart';
 import 'package:numenu/views/widgets/food_type_view.dart';
 import 'package:numenu/views/widgets/restaurant_card.dart';
+import 'package:numenu/views/widgets/restaurant_results_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../state_management/global_state_service.dart';
@@ -14,7 +15,9 @@ import '../../state_management/global_state_service.dart';
 /// application (searching, viewing results, viewing restaurant info)
 
 class AnimatedDataView extends StatelessWidget {
-  const AnimatedDataView({super.key});
+  AnimatedDataView({super.key});
+
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,57 +46,68 @@ class AnimatedDataView extends StatelessWidget {
     return Positioned(
       bottom: 0,
       child: Consumer<GlobalStateService>(
-        builder: (context, state, child) => GestureDetector(
-          onVerticalDragUpdate: (details) {
-            // if the app state is not viewing restaurant results, return
-            if (state.state != AppState.viewingRestaurantResults) {
-              return;
-            }
+        builder: (context, state, child) {
+          if (state.state == AppState.viewingFoodTypes) {
+            // _scrollController.jumpTo(0);
+          }
+          return GestureDetector(
+            onVerticalDragUpdate: (details) {
+              // if the app state is not viewing restaurant results, return
+              if (state.state != AppState.viewingRestaurantResults) {
+                return;
+              }
 
-            if (details.delta.dy > 0) {
-              Provider.of<GlobalStateService>(context, listen: false)
-                  .changeStateTo(AppState.minimizedDataView);
-            } else {
-              Provider.of<GlobalStateService>(context, listen: false)
-                  .changeStateTo(AppState.viewingRestaurantResults);
-            }
-          },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 400),
-            // TODO: Abstract into the controller
-            curve: state.state == AppState.viewingRestaurantResults ||
-                    state.state == AppState.minimizedDataView
-                ? Curves.fastEaseInToSlowEaseOut
-                : Curves.fastLinearToSlowEaseIn,
-            width: MediaQuery.of(context).size.width,
-            height: determineHeight(
-                Provider.of<GlobalStateService>(context, listen: false).state),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 20,
-                  spreadRadius: 10.0,
-                  offset: const Offset(0, 0),
+              // if (details.delta.dy > 0) {
+              //   Provider.of<GlobalStateService>(context, listen: false)
+              //       .changeStateTo(AppState.minimizedDataView);
+              // } else {
+              //   Provider.of<GlobalStateService>(context, listen: false)
+              //       .changeStateTo(AppState.viewingRestaurantResults);
+              // }
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 400),
+              // TODO: Abstract into the controller
+              curve: state.state == AppState.viewingRestaurantResults ||
+                      state.state == AppState.minimizedDataView
+                  ? Curves.fastEaseInToSlowEaseOut
+                  : Curves.fastLinearToSlowEaseIn,
+              width: MediaQuery.of(context).size.width,
+              height: determineHeight(
+                  Provider.of<GlobalStateService>(context, listen: false)
+                      .state),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 20,
+                    spreadRadius: 10.0,
+                    offset: const Offset(0, 0),
+                  ),
+                ],
+                color: Colors.white,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(65),
+                  topRight: Radius.circular(65),
                 ),
-              ],
-              color: Colors.white,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(65),
-                topRight: Radius.circular(65),
               ),
-            ),
-            child: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.vertical,
               child: Center(
                 child: Column(
-                  children: [const BackAndCloseButtons(), determineViewVisibility(state.state)],
+                  children: [
+                    const BackAndCloseButtons(),
+                    Expanded(
+                        child: SingleChildScrollView(
+                            controller: state.scrollController,
+                            physics: state.state == AppState.viewingFoodTypes
+                                ? const NeverScrollableScrollPhysics()
+                                : const AlwaysScrollableScrollPhysics(),
+                            child: determineViewVisibility(state.state)))
+                  ],
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -104,7 +118,7 @@ Widget determineViewVisibility(AppState state) {
     case AppState.viewingFoodTypes:
       return const FoodTypeView();
     case AppState.viewingRestaurantResults:
-      return RestaurantCard(resName: 'McDonalds', address: '1234 McDonalds Ln', rating: 5, latLng: const LatLng(0, 0));
+      return RestaurantResultsView();
     case AppState.viewingRestaurantInfo:
       return Container();
     case AppState.viewingMap:

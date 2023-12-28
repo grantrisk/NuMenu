@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:numenu/views/widgets/animated_text.dart';
 import 'package:provider/provider.dart';
 
 import '../../state_management/global_state_service.dart';
@@ -22,6 +23,11 @@ class BackAndCloseButtons extends StatelessWidget {
               onPressed: () {
                 Provider.of<GlobalStateService>(context, listen: false)
                     .changeStateTo(AppState.viewingFoodTypes);
+
+                // This ensures that there is no scroll offset when the user
+                // goes back to the food types view
+                Provider.of<GlobalStateService>(context, listen: false)
+                    .resetScrollController();
               },
               icon: const Icon(Icons.arrow_back),
             ),
@@ -34,13 +40,8 @@ class BackAndCloseButtons extends StatelessWidget {
                         padding: EdgeInsets.only(
                           top: MediaQuery.of(context).size.width * 0.05,
                         ),
-                        child: Text(
-                          state.currentRestaurantType.toUpperCase(),
-                          style: const TextStyle(
-                            color: Color.fromARGB(255, 251, 181, 29),
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w900,
-                          ),
+                        child: AnimatedTextWidget(
+                          text: state.currentRestaurantType.toUpperCase(),
                         ),
                       )
                     : Container();

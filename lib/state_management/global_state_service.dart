@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:numenu/api/api.dart';
 
 /// This service allows you to change the global state of the application
@@ -34,12 +35,20 @@ class GlobalStateService extends ChangeNotifier {
 
   late GeneralRestaurantType restaurantType;
 
+  final ScrollController _scrollController = ScrollController();
+
   AppState _state = AppState.init;
   // TODO: map of restaurants from api
 
   AppState get state => _state;
 
   String get currentRestaurantType => restaurantType.name;
+
+  ScrollController get scrollController => _scrollController;
+
+  void resetScrollController() {
+    _scrollController.jumpTo(0);
+  }
 
   void changeRestaurantTypeTo(GeneralRestaurantType type) {
     restaurantType = type;

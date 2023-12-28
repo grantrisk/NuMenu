@@ -296,7 +296,7 @@ class _MyMapState extends State<MyMap> {
          */
         Consumer<GlobalStateService>(
           builder: (context, state, child) {
-            return const AnimatedDataView();
+            return AnimatedDataView();
           },
         ),
       ],
