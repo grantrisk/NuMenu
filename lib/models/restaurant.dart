@@ -1,5 +1,14 @@
 import 'package:latlong2/latlong.dart';
 
+enum GeneralRestaurantType {
+  mexican,
+  italian,
+  american,
+  asian,
+  mediterranean,
+  any
+}
+
 class Restaurant {
   final String name;
   final String address;
