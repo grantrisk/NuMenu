@@ -14,7 +14,7 @@ class RestaurantService {
   Future<List<Restaurant>> getRestaurants({
     required double latitude,
     required double longitude,
-    required RestaurantType type,
+    required List<RestaurantType> types,
     int maxResultCount = 10,
     double radiusInMiles = 5.0, // default radius in miles
   }) async {
@@ -25,7 +25,7 @@ class RestaurantService {
     return GooglePlacesApiHelper.fetchNearbyRestaurants(
       latitude: latitude,
       longitude: longitude,
-      type: type,
+      types: types,
       maxResultCount: maxResultCount,
       radius: radiusInMeters,
     );
