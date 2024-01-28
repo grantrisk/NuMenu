@@ -14,12 +14,15 @@ class Restaurant {
   final String address;
   final double rating;
   final LatLng location;
+  final Map<String, dynamic> additionalInfo;
 
-  Restaurant(
-      {required this.name,
-      required this.address,
-      required this.rating,
-      required this.location});
+  Restaurant({
+    required this.name,
+    required this.address,
+    required this.rating,
+    required this.location,
+    this.additionalInfo = const {},
+  });
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
     return Restaurant(
@@ -31,6 +34,7 @@ class Restaurant {
       ),
       rating:
           (json['rating'] != null) ? (json['rating'] as num).toDouble() : 0.0,
+      additionalInfo: json,
     );
   }
 }

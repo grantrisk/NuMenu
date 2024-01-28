@@ -56,7 +56,50 @@ enum RestaurantType {
 class BasicFieldMasks {
   static const String accessibilityOptions = 'places.accessibilityOptions';
   static const String addressComponents = 'places.addressComponents';
-// ... Add other fields in the Basic category
+  static const String adrFormatAddress = 'places.adrFormatAddress';
+  static const String businessStatus = 'places.businessStatus';
+  static const String displayName = 'places.displayName';
+  static const String formattedAddress = 'places.formattedAddress';
+  static const String googleMapsUri = 'places.googleMapsUri';
+  static const String iconBackgroundColor = 'places.iconBackgroundColor';
+  static const String iconMaskBaseUri = 'places.iconMaskBaseUri';
+  static const String id = 'places.id';
+  static const String location = 'places.location';
+  static const String name = 'places.name';
+  static const String photos = 'places.photos';
+  static const String plusCode = 'places.plusCode';
+  static const String primaryType = 'places.primaryType';
+  static const String primaryTypeDisplayName = 'places.primaryTypeDisplayName';
+  static const String shortFormattedAddress = 'places.shortFormattedAddress';
+  static const String subDestinations = 'places.subDestinations';
+  static const String types = 'places.types';
+  static const String utcOffsetMinutes = 'places.utcOffsetMinutes';
+  static const String viewport = 'places.viewport';
+}
+
+// convert to enum
+enum BasicFieldMask {
+  accessibilityOptions,
+  addressComponents,
+  adrFormatAddress,
+  businessStatus,
+  displayName,
+  formattedAddress,
+  googleMapsUri,
+  iconBackgroundColor,
+  iconMaskBaseUri,
+  id,
+  location,
+  name,
+  photos,
+  plusCode,
+  primaryType,
+  primaryTypeDisplayName,
+  shortFormattedAddress,
+  subDestinations,
+  types,
+  utcOffsetMinutes,
+  viewport,
 }
 
 // Class that contains various advanced field masks for the Google Places API.
@@ -64,14 +107,45 @@ class AdvancedFieldMasks {
   static const String currentOpeningHours = 'places.currentOpeningHours';
   static const String internationalPhoneNumber =
       'places.internationalPhoneNumber';
-// ... Add other fields in the Advanced category
+  static const String nationalPhoneNumber = 'places.nationalPhoneNumber';
+  static const String priceLevel = 'places.priceLevel';
+  static const String rating = 'places.rating';
+  static const String regularOpeningHours = 'places.regularOpeningHours';
+  static const String userRatingCount = 'places.userRatingCount';
+  static const String websiteUri = 'places.websiteUri';
 }
 
 // Class that contains various preferred field masks for the Google Places API.
 class PreferredFieldMasks {
   static const String allowsDogs = 'places.allowsDogs';
   static const String curbsidePickup = 'places.curbsidePickup';
-// ... Add other fields in the Preferred category
+  static const String delivery = 'places.delivery';
+  static const String dineIn = 'places.dineIn';
+  static const String editorialSummary = 'places.editorialSummary';
+  static const String evChargeOptions = 'places.evChargeOptions';
+  static const String fuelOptions = 'places.fuelOptions';
+  static const String goodForChildren = 'places.goodForChildren';
+  static const String goodForGroups = 'places.goodForGroups';
+  static const String goodForWatchingSports = 'places.goodForWatchingSports';
+  static const String liveMusic = 'places.liveMusic';
+  static const String menuForChildren = 'places.menuForChildren';
+  static const String parkingOptions = 'places.parkingOptions';
+  static const String paymentOptions = 'places.paymentOptions';
+  static const String outdoorSeating = 'places.outdoorSeating';
+  static const String reservable = 'places.reservable';
+  static const String restroom = 'places.restroom';
+  static const String reviews = 'places.reviews';
+  static const String servesBeer = 'places.servesBeer';
+  static const String servesBreakfast = 'places.servesBreakfast';
+  static const String servesBrunch = 'places.servesBrunch';
+  static const String servesCocktails = 'places.servesCocktails';
+  static const String servesCoffee = 'places.servesCoffee';
+  static const String servesDesserts = 'places.servesDesserts';
+  static const String servesDinner = 'places.servesDinner';
+  static const String servesLunch = 'places.servesLunch';
+  static const String servesVegetarianFood = 'places.servesVegetarianFood';
+  static const String servesWine = 'places.servesWine';
+  static const String takeout = 'places.takeout';
 }
 
 class GooglePlacesApiHelper {

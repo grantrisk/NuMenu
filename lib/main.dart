@@ -49,14 +49,20 @@ void main() async {
     types: [RestaurantType.hamburgerRestaurant, RestaurantType.pizzaRestaurant],
     maxResultCount: 20,
     radiusInMiles: 5,
+    basicFieldMasks: [
+      BasicFieldMasks.primaryType, // Include primary type in the field masks
+      // ... any other basic field masks you need
+    ],
   );
 
   // TODO get the lat and long of the businesses
   if (restaurants.isNotEmpty) {
     print('Fetched ${restaurants.length} restaurants:');
-    /*for (final restaurant in restaurants) {
-      print('Name: ${restaurant.name}, Type: ${restaurant.type}');
-    }*/
+    for (final restaurant in restaurants) {
+      print(restaurant.name + ' ' + restaurant.additionalInfo['primaryType']);
+      print(restaurant.additionalInfo);
+      print('');
+    }
   } else {
     print('No restaurants found.');
   }
