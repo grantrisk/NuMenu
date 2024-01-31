@@ -46,18 +46,23 @@ void main() async {
   final restaurants = await service.getRestaurants(
     latitude: 34.2104,
     longitude: -77.8868,
-    type: RestaurantType.hamburgerRestaurant,
+    types: [RestaurantType.hamburgerRestaurant, RestaurantType.pizzaRestaurant],
     maxResultCount: 20,
-    radiusInMiles: 3,
+    radiusInMiles: 5,
+    basicFieldMasks: [
+      BasicFieldMasks.primaryType, // Include primary type in the field masks
+      // ... any other basic field masks you need
+    ],
   );
 
   // TODO get the lat and long of the businesses
   if (restaurants.isNotEmpty) {
     print('Fetched ${restaurants.length} restaurants:');
-    /*for (final restaurant in restaurants) {
-      print('Name: ${restaurant.name}, Address: ${restaurant.address}, '
-          'Rating: ${restaurant.rating}, Location: ${restaurant.location}');
-    }*/
+    for (final restaurant in restaurants) {
+      print(restaurant.name + ' ' + restaurant.additionalInfo['primaryType']);
+      print(restaurant.additionalInfo);
+      print('');
+    }
   } else {
     print('No restaurants found.');
   }
@@ -146,7 +151,7 @@ class _MyMapState extends State<MyMap> {
     final newRestaurants = await service.getRestaurants(
       latitude: center.latitude,
       longitude: center.longitude,
-      type: RestaurantType.hamburgerRestaurant,
+      types: [RestaurantType.hamburgerRestaurant],
       maxResultCount: 20,
       radiusInMiles: 3,
     );

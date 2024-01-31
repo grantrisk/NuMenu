@@ -14,9 +14,14 @@ class RestaurantService {
   Future<List<Restaurant>> getRestaurants({
     required double latitude,
     required double longitude,
-    required RestaurantType type,
+    required List<RestaurantType> types,
     int maxResultCount = 10,
     double radiusInMiles = 5.0, // default radius in miles
+    String languageCode = 'en',
+    String rankPreference = 'POPULARITY',
+    List<String> basicFieldMasks = const [],
+    List<String> advancedFieldMasks = const [],
+    List<String> preferredFieldMasks = const [],
   }) async {
     // Convert miles to meters
     double radiusInMeters = radiusInMiles * 1609.34;
@@ -25,9 +30,14 @@ class RestaurantService {
     return GooglePlacesApiHelper.fetchNearbyRestaurants(
       latitude: latitude,
       longitude: longitude,
-      type: type,
+      types: types,
       maxResultCount: maxResultCount,
       radius: radiusInMeters,
+      languageCode: languageCode,
+      rankPreference: rankPreference,
+      basicFieldMasks: basicFieldMasks,
+      advancedFieldMasks: advancedFieldMasks,
+      preferredFieldMasks: preferredFieldMasks,
     );
   }
 }
