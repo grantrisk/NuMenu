@@ -4,6 +4,7 @@ import 'package:numenu/views/widgets/back_and_close_buttons.dart';
 import 'package:numenu/views/widgets/food_type_view.dart';
 import 'package:numenu/views/widgets/restaurant_card.dart';
 import 'package:numenu/views/widgets/restaurant_results_view.dart';
+import 'package:numenu/views/widgets/single_restuarant_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../state_management/global_state_service.dart';
@@ -90,7 +91,6 @@ class AnimatedDataView extends StatelessWidget {
                     const BackAndCloseButtons(),
                     Expanded(
                         child: SingleChildScrollView(
-                            controller: state.scrollController,
                             physics: state.state == AppState.viewingFoodTypes
                                 ? const NeverScrollableScrollPhysics()
                                 : const AlwaysScrollableScrollPhysics(),
@@ -113,7 +113,7 @@ Widget determineViewVisibility(AppState state) {
     case AppState.viewingRestaurantResults:
       return const RestaurantResultsView();
     case AppState.viewingRestaurantInfo:
-      return Container();
+      return const SingleRestaurantView();
     case AppState.viewingMap:
       return Container();
     case AppState.loading:
