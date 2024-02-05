@@ -103,13 +103,11 @@ class AnimatedDataView extends StatelessWidget {
 Widget determineViewVisibility(AppState state, GlobalStateService stateService) {
   switch (state) {
     case AppState.viewingFoodTypes:
-      return SingleChildScrollView(
-          key: UniqueKey(),
-          child: const FoodTypeView());
+      return const SingleChildScrollView(
+          child: FoodTypeView());
     case AppState.viewingRestaurantResults:
-      return SingleChildScrollView(
-        key: UniqueKey(),
-          child: const RestaurantResultsView());
+      return const SingleChildScrollView(
+          child: RestaurantResultsView());
     case AppState.viewingRestaurantInfo:
       return SingleChildScrollView(
         key: UniqueKey(),

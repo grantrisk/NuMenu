@@ -5,7 +5,9 @@ import 'package:numenu/views/widgets/restaurant_card.dart';
 import 'package:provider/provider.dart';
 
 class SingleRestaurantView extends StatefulWidget {
-  const SingleRestaurantView({Key? key, required Map<String, dynamic> resInfo}) : super(key: key);
+  const SingleRestaurantView({Key? key, required this.resInfo}) : super(key: key);
+
+  final Map<String, dynamic> resInfo;
 
   @override
   _SingleRestaurantViewState createState() => _SingleRestaurantViewState();
@@ -14,9 +16,12 @@ class SingleRestaurantView extends StatefulWidget {
 class _SingleRestaurantViewState extends State<SingleRestaurantView>
     with TickerProviderStateMixin {
   late List<AnimationController> _fadeControllers;
+  late Map<String, dynamic> resInfo;
   @override
   void initState() {
     super.initState();
+
+    resInfo = widget.resInfo;
 
     _fadeControllers = [];
 
