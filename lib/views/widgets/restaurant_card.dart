@@ -110,10 +110,11 @@ class RestaurantCard extends StatelessWidget {
                         left: MediaQuery.of(context).size.width * 0.05,
                         bottom: MediaQuery.of(context).size.width * 0.025,
                       ),
+                      /// Restaurant type here
                       child: Text(
-                        address,
+                        'Food | Restaurant Type',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w800,
                           color: Colors.grey[400],
                         ),
@@ -129,9 +130,25 @@ class RestaurantCard extends StatelessWidget {
                         bottom: MediaQuery.of(context).size.width * 0.025,
                       ),
                       child: Text(
-                        '0.5 miles away',
+                        address,
                         style: TextStyle(
                           fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.grey[400],
+                        ),
+                      ),
+                    ),
+                    Spacer(flex: 3),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.05,
+                        bottom: MediaQuery.of(context).size.width * 0.025,
+                        right: MediaQuery.of(context).size.width * 0.025,
+                      ),
+                      child: Text(
+                        '0.5 miles',
+                        style: TextStyle(
+                          fontSize: 16,
                           fontWeight: FontWeight.w800,
                           color: Colors.grey[400],
                         ),
