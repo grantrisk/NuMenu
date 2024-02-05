@@ -37,6 +37,9 @@ class GlobalStateService extends ChangeNotifier {
 
   final ScrollController _scrollController = ScrollController();
 
+  /// When the user selects a restaurant to view, this will hold its info.
+  late Map<String, dynamic> selectedResInfo;
+
   AppState _state = AppState.viewingFoodTypes;
   // TODO: map of restaurants from api
 
@@ -52,6 +55,11 @@ class GlobalStateService extends ChangeNotifier {
 
   void changeRestaurantTypeTo(GeneralRestaurantType type) {
     restaurantType = type;
+    notifyListeners();
+  }
+
+  void changeSelectedRestaurantTo(Map<String,dynamic> newResInfo) {
+    selectedResInfo = newResInfo;
     notifyListeners();
   }
 

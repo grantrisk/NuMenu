@@ -6,6 +6,8 @@ import '../../state_management/global_state_service.dart';
 import 'package:latlong2/latlong.dart';
 
 class RestaurantCard extends StatelessWidget {
+  // TODO
+  /// Convert these params into a map for ease of passage to state service
   const RestaurantCard({
     Key? key,
     required this.resName,
@@ -25,6 +27,15 @@ class RestaurantCard extends StatelessWidget {
       builder: (context, state, child) {
         return GestureDetector(
           onTap: () {
+            final selectedResInfo = {
+              'Name' : resName,
+              'Address' : address,
+              'Rating' : rating,
+              'Phone' : '(123) 456-7890'
+            };
+            Provider.of<GlobalStateService>(context, listen: false)
+                .changeSelectedRestaurantTo(selectedResInfo);
+
             Provider.of<GlobalStateService>(context, listen: false)
                 .changeStateTo(AppState.viewingRestaurantInfo);
           },
@@ -51,7 +62,7 @@ class RestaurantCard extends StatelessWidget {
                   padding: EdgeInsets.only(
                     top: MediaQuery.of(context).size.width * 0.025,
                     left: MediaQuery.of(context).size.width * 0.05,
-                    right: MediaQuery.of(context).size.width * 0.05,
+                    right: MediaQuery.of(context).size.width * 0.03,
                     bottom: MediaQuery.of(context).size.width * 0.025,
                   ),
                   child: Row(
@@ -67,23 +78,24 @@ class RestaurantCard extends StatelessWidget {
                       const Text(
                         '⭐',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 14,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                       Text(
                         rating.toString(),
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w800,
                           color: Color.fromARGB(255, 251, 181, 29),
                         ),
                       ),
-                      const Spacer(),
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                       Text(
                         '(400) Google',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w800,
                           color: Colors.grey[400]!,
                         ),

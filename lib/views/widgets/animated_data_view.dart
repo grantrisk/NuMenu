@@ -90,11 +90,7 @@ class AnimatedDataView extends StatelessWidget {
                   children: [
                     const BackAndCloseButtons(),
                     Expanded(
-                        child: SingleChildScrollView(
-                            physics: state.state == AppState.viewingFoodTypes
-                                ? const NeverScrollableScrollPhysics()
-                                : const AlwaysScrollableScrollPhysics(),
-                            child: determineViewVisibility(state.state)))
+                        child: determineViewVisibility(state.state, state),)
                   ],
                 ),
               ),
@@ -106,14 +102,20 @@ class AnimatedDataView extends StatelessWidget {
   }
 }
 
-Widget determineViewVisibility(AppState state) {
+Widget determineViewVisibility(AppState state, GlobalStateService stateService) {
   switch (state) {
     case AppState.viewingFoodTypes:
-      return const FoodTypeView();
+      return SingleChildScrollView(
+          key: UniqueKey(),
+          child: const FoodTypeView());
     case AppState.viewingRestaurantResults:
-      return const RestaurantResultsView();
+      return SingleChildScrollView(
+        key: UniqueKey(),
+          child: const RestaurantResultsView());
     case AppState.viewingRestaurantInfo:
-      return const SingleRestaurantView();
+      return SingleChildScrollView(
+        key: UniqueKey(),
+          child: SingleRestaurantView(resInfo: stateService.selectedResInfo));
     case AppState.viewingMap:
       return Container();
     case AppState.loading:

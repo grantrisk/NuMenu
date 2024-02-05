@@ -5,7 +5,7 @@ import 'package:numenu/views/widgets/restaurant_card.dart';
 import 'package:provider/provider.dart';
 
 class SingleRestaurantView extends StatefulWidget {
-  const SingleRestaurantView({Key? key}) : super(key: key);
+  const SingleRestaurantView({Key? key, required Map<String, dynamic> resInfo}) : super(key: key);
 
   @override
   _SingleRestaurantViewState createState() => _SingleRestaurantViewState();
@@ -14,7 +14,7 @@ class SingleRestaurantView extends StatefulWidget {
 class _SingleRestaurantViewState extends State<SingleRestaurantView>
     with TickerProviderStateMixin {
   late List<AnimationController> _fadeControllers;
-
+  late ScrollController _scrollController;
   @override
   void initState() {
     super.initState();
@@ -62,7 +62,7 @@ class _SingleRestaurantViewState extends State<SingleRestaurantView>
         .size
         .height;
 
-    var squareSize = screenWidth * 0.3; // Example: 20% of the screen width
+    var squareSize = screenWidth * 0.2; // Example: 20% of the screen width
 
     var buttonPadding = EdgeInsets.fromLTRB(
       screenWidth * 0.05,
@@ -73,37 +73,43 @@ class _SingleRestaurantViewState extends State<SingleRestaurantView>
 
     return Consumer<GlobalStateService>(
       builder: (context, state, child) {
-        return Container(
-          height: squareSize + screenHeight * 0.02,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            // TODO
-            /// This needs to be the length of the images list
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: buttonPadding,
-                child: FadeTransition(
-                  opacity: _fadeControllers[index],
-                  // TODO
-                  /// Pass in the image as a param
-                  /// ```
-                  ///  RestaurantImage(image: imagesList[index])
-                  /// ```
-                  child: Container(
-                    width: squareSize,
-                    height: squareSize,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey,
-                        width: 2.0,
+        return Column(
+          children: [
+            Container(
+              height: squareSize + screenHeight * 0.02,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                // TODO
+                /// This needs to be the length of the images list
+                /// This needs to be the length of the images list
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: buttonPadding,
+                    child: FadeTransition(
+                      opacity: _fadeControllers[index],
+                      // TODO
+                      /// Pass in the image as a param
+                      /// ```
+                      ///  RestaurantImage(image: imagesList[index])
+                      /// ```
+                      child: Container(
+                        width: squareSize,
+                        height: squareSize,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 2.0,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              );
-            },
-          ),
+                  );
+                },
+              ),
+            ),
+
+          ],
         );
       },
     );
