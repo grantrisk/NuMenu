@@ -14,7 +14,6 @@ class SingleRestaurantView extends StatefulWidget {
 class _SingleRestaurantViewState extends State<SingleRestaurantView>
     with TickerProviderStateMixin {
   late List<AnimationController> _fadeControllers;
-  late ScrollController _scrollController;
   @override
   void initState() {
     super.initState();
@@ -26,11 +25,6 @@ class _SingleRestaurantViewState extends State<SingleRestaurantView>
       var controller = AnimationController(
         vsync: this,
         duration: const Duration(milliseconds: 500),
-      );
-
-      var curvedAnimation = CurvedAnimation(
-          parent: controller,
-          curve: Curves.fastEaseInToSlowEaseOut // Define the curve
       );
 
       Future.delayed(Duration(milliseconds: i * 50), () {

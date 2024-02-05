@@ -28,12 +28,6 @@ class _RestaurantResultsViewState extends State<RestaurantResultsView>
         duration: const Duration(milliseconds: 500),
       );
 
-      // Apply a curve to the fade animation
-      var curvedAnimation = CurvedAnimation(
-          parent: controller,
-          curve: Curves.fastEaseInToSlowEaseOut // Define the curve
-          );
-
       // Add a delay to stagger the animations
       Future.delayed(Duration(milliseconds: i * 50), () {
         if (mounted) {

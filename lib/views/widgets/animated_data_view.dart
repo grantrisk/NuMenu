@@ -18,8 +18,6 @@ import '../../state_management/global_state_service.dart';
 class AnimatedDataView extends StatelessWidget {
   AnimatedDataView({super.key});
 
-  final ScrollController _scrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
     // TODO: Abstract into the controller
