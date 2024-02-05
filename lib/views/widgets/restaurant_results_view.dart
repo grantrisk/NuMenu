@@ -65,6 +65,10 @@ class _RestaurantResultsViewState extends State<RestaurantResultsView>
       screenHeight * 0.01,
     );
 
+    /// Here is how I am making the cards at the moment
+    ///
+    /// When filtering the restaurants, you could use the length of the list
+    /// rather than 10.
     List<Widget> restaurantCards = List.generate(10, (index) {
       return Padding(
         padding: (index == 0)
@@ -74,6 +78,7 @@ class _RestaurantResultsViewState extends State<RestaurantResultsView>
         child: FadeTransition(
           opacity: _fadeControllers[index],
           child: RestaurantCard(
+            /// Here, you could access the index of the list of filtered restaurants
             resName: 'Restaurant ${index + 1}',
             address: 'Address ${index + 1}',
             rating: 5,

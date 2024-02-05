@@ -9,28 +9,21 @@ class BackAndCloseButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(
-            padding: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width * 0.05,
-              top: MediaQuery.of(context).size.width * 0.05,
-            ),
-            child: IconButton(
-              onPressed: () {
-                Provider.of<GlobalStateService>(context, listen: false)
-                    .changeStateTo(AppState.viewingFoodTypes);
-
-                // This ensures that there is no scroll offset when the user
-                // goes back to the food types view
-                Provider.of<GlobalStateService>(context, listen: false)
-                    .resetScrollController();
-              },
-              icon: const Icon(Icons.arrow_back),
-            ),
+          Consumer<GlobalStateService>(
+            builder: (context, state, child) {
+              return Padding(
+                padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.05,
+                  top: MediaQuery.of(context).size.width * 0.05,
+                ),
+                child: showBackButton(state, context), // Assuming showBackButton uses the state
+              );
+            },
           ),
           Expanded(
             child: Consumer<GlobalStateService>(
@@ -48,18 +41,16 @@ class BackAndCloseButtons extends StatelessWidget {
               },
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              right: MediaQuery.of(context).size.width * 0.05,
-              top: MediaQuery.of(context).size.width * 0.05,
-            ),
-            child: IconButton(
-              onPressed: () {
-                Provider.of<GlobalStateService>(context, listen: false)
-                    .changeStateTo(AppState.minimizedDataView);
-              },
-              icon: const Icon(Icons.close),
-            ),
+          Consumer<GlobalStateService>(
+            builder: (context, state, child) {
+              return Padding(
+                padding: EdgeInsets.only(
+                  right: MediaQuery.of(context).size.width * 0.05,
+                  top: MediaQuery.of(context).size.width * 0.05,
+                ),
+                child: showCloseButton(state, context), // Using state and context
+              );
+            },
           ),
         ],
       ),
@@ -78,5 +69,38 @@ class BackAndCloseButtons extends StatelessWidget {
       case AppState.viewingRestaurantResults:
         return true;
     }
+  }
+
+  Widget showBackButton(GlobalStateService state, BuildContext context) {
+    return AnimatedOpacity(
+      opacity: state.state == AppState.viewingRestaurantResults ? 1 : 0,
+      duration: const Duration(milliseconds: 50),
+      child: IconButton(
+        onPressed: () {
+          Provider.of<GlobalStateService>(context, listen: false)
+              .changeStateTo(AppState.viewingFoodTypes);
+        },
+        icon: const Icon(Icons.arrow_back),
+      ),
+    );
+  }
+
+  Widget showCloseButton(GlobalStateService state, BuildContext context) {
+      return AnimatedOpacity(
+        opacity: state.state == AppState.viewingRestaurantResults || state.state == AppState.viewingRestaurantInfo ? 1 : 0,
+        duration: const Duration(milliseconds: 50),
+        child: IconButton(
+          onPressed: () {
+            if (state.state == AppState.viewingRestaurantInfo) {
+              Provider.of<GlobalStateService>(context, listen: false)
+                  .changeStateTo(AppState.viewingRestaurantResults);
+            } else if (state.state == AppState.viewingRestaurantResults) {
+              Provider.of<GlobalStateService>(context, listen: false)
+                  .changeStateTo(AppState.minimizedDataView);
+            }
+          },
+          icon: const Icon(Icons.close),
+        ),
+      );
   }
 }

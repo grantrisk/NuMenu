@@ -29,13 +29,13 @@ class AnimatedDataView extends StatelessWidget {
         case AppState.viewingRestaurantResults:
           return MediaQuery.of(context).size.height / 1.9;
         case AppState.viewingRestaurantInfo:
-          return 0;
+          return MediaQuery.of(context).size.height / 1.1;
         case AppState.viewingMap:
           return MediaQuery.of(context).size.height / 2;
         case AppState.loading:
           return 0;
         case AppState.init:
-          return MediaQuery.of(context).size.height / 1.2;
+          return 0;
         case AppState.minimizedDataView:
           return MediaQuery.of(context).size.height / 10;
         default:
@@ -53,17 +53,10 @@ class AnimatedDataView extends StatelessWidget {
           return GestureDetector(
             onVerticalDragUpdate: (details) {
               // if the app state is not viewing restaurant results, return
-              if (state.state != AppState.viewingRestaurantResults) {
-                return;
+              if (state.state == AppState.minimizedDataView) {
+                Provider.of<GlobalStateService>(context, listen: false)
+                    .changeStateTo(AppState.viewingRestaurantResults);
               }
-
-              // if (details.delta.dy > 0) {
-              //   Provider.of<GlobalStateService>(context, listen: false)
-              //       .changeStateTo(AppState.minimizedDataView);
-              // } else {
-              //   Provider.of<GlobalStateService>(context, listen: false)
-              //       .changeStateTo(AppState.viewingRestaurantResults);
-              // }
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 400),
@@ -118,7 +111,7 @@ Widget determineViewVisibility(AppState state) {
     case AppState.viewingFoodTypes:
       return const FoodTypeView();
     case AppState.viewingRestaurantResults:
-      return RestaurantResultsView();
+      return const RestaurantResultsView();
     case AppState.viewingRestaurantInfo:
       return Container();
     case AppState.viewingMap:

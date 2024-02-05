@@ -205,7 +205,7 @@ class _MyMapState extends State<MyMap> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           child: Container(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20.0),
@@ -220,11 +220,11 @@ class _MyMapState extends State<MyMap> {
                     fontSize: 24.0,
                   ),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 ListTile(
                   leading: Icon(Icons.location_on,
                       color: Theme.of(context).primaryColor),
-                  title: Text('Address'),
+                  title: const Text('Address'),
                   subtitle: Text(restaurant.address),
                   onTap: () async {
                     var query = Uri.encodeComponent(restaurant.address);
@@ -241,14 +241,14 @@ class _MyMapState extends State<MyMap> {
                 ListTile(
                   leading:
                       Icon(Icons.star, color: Theme.of(context).primaryColor),
-                  title: Text('Rating'),
+                  title: const Text('Rating'),
                   subtitle: Text(restaurant.rating.toString()),
                 ),
                 // ... additional details ...
-                SizedBox(height: 24.0),
+                const SizedBox(height: 24.0),
                 ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: Text('Close'),
+                  child: const Text('Close'),
                   // ... button styling ...
                 ),
               ],
@@ -264,11 +264,6 @@ class _MyMapState extends State<MyMap> {
     return Stack(
       alignment: AlignmentDirectional.topCenter,
       children: <Widget>[
-        /** Child 1: The map itself
-         *      The first is the deepest in the stack, so it will be the bottom-most
-         *    widget. It is only revealed when the user is not searching for
-         *    restaurants.
-         */
         FlutterMap(
           mapController: mapController,
           options: MapOptions(
@@ -293,12 +288,6 @@ class _MyMapState extends State<MyMap> {
         ),
         const YellowBg(),
         const MySearchBar(),
-
-        /** Child 4: Jumpy White Box (AnimatedDataView)
-         *        The fourth widget is the white box that appears when the user is
-         *    searching for restaurants. It will be animated to move up and down
-         *    depending on the state of the application.
-         */
         Consumer<GlobalStateService>(
           builder: (context, state, child) {
             return AnimatedDataView();

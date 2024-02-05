@@ -37,7 +37,7 @@ class GlobalStateService extends ChangeNotifier {
 
   final ScrollController _scrollController = ScrollController();
 
-  AppState _state = AppState.init;
+  AppState _state = AppState.viewingFoodTypes;
   // TODO: map of restaurants from api
 
   AppState get state => _state;
