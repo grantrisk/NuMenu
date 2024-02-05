@@ -138,7 +138,7 @@ class RestaurantCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Spacer(flex: 3),
+                    const Spacer(flex: 3),
                     Padding(
                       padding: EdgeInsets.only(
                         left: MediaQuery.of(context).size.width * 0.05,
