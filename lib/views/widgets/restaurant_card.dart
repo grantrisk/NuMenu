@@ -49,10 +49,10 @@ class RestaurantCard extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
+                  color: Colors.grey.withOpacity(0.6),
                   spreadRadius: 0,
                   blurRadius: 5,
-                  offset: const Offset(0, 3),
+                  offset: const Offset(1, 4),
                 ),
               ],
             ),
