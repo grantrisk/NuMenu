@@ -46,7 +46,7 @@ void main() async {
   final restaurants = await service.getRestaurants(
     latitude: 34.2104,
     longitude: -77.8868,
-    types: [RestaurantType.hamburgerRestaurant, RestaurantType.pizzaRestaurant],
+    types: [],
     maxResultCount: 20,
     radiusInMiles: 5,
     basicFieldMasks: [
@@ -133,25 +133,29 @@ class _MyMapState extends State<MyMap> {
     super.dispose();
   }
 
-  void _onMapPositionChange(MapPosition position, bool hasGesture) {
+  void _onMapPositionChange(MapPosition position, bool hasGesture,
+      BuildContext context) {
     if (hasGesture) {
       if (_debounce?.isActive ?? false) _debounce?.cancel();
       _debounce = Timer(const Duration(seconds: 2), () {
         // Ensure the position center is not null
         if (position.center != null) {
           _loadRestaurants(position
-              .center!); // Use the '!' operator to cast LatLng? to LatLng
+              .center!,
+              context); // Use the '!' operator to cast LatLng? to LatLng
         }
       });
     }
   }
 
-  Future<void> _loadRestaurants(LatLng center) async {
+  Future<void> _loadRestaurants(LatLng center, BuildContext context) async {
+    final globalStateService = Provider.of<GlobalStateService>(
+        context, listen: false);
     final service = RestaurantService();
     final newRestaurants = await service.getRestaurants(
       latitude: center.latitude,
       longitude: center.longitude,
-      types: [RestaurantType.hamburgerRestaurant],
+      types: globalStateService.apiResTypes,
       maxResultCount: 20,
       radiusInMiles: 3,
     );
@@ -169,11 +173,11 @@ class _MyMapState extends State<MyMap> {
     }
   }
 
-  List<Marker> _createRestaurantMarkers() {
-    return restaurants.map((restaurant) {
+  List<Marker> _createRestaurantMarkers(restaurants) {
+    return restaurants.map<Marker>((restaurant) {
       return Marker(
         point:
-            LatLng(restaurant.location.latitude, restaurant.location.longitude),
+        LatLng(restaurant.location.latitude, restaurant.location.longitude),
         width: markerSize,
         height: markerSize,
         alignment: Alignment.topCenter,
@@ -203,7 +207,7 @@ class _MyMapState extends State<MyMap> {
       builder: (context) {
         return Dialog(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           child: Container(
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
@@ -223,7 +227,9 @@ class _MyMapState extends State<MyMap> {
                 const SizedBox(height: 16.0),
                 ListTile(
                   leading: Icon(Icons.location_on,
-                      color: Theme.of(context).primaryColor),
+                      color: Theme
+                          .of(context)
+                          .primaryColor),
                   title: const Text('Address'),
                   subtitle: Text(restaurant.address),
                   onTap: () async {
@@ -240,7 +246,9 @@ class _MyMapState extends State<MyMap> {
                 ),
                 ListTile(
                   leading:
-                      Icon(Icons.star, color: Theme.of(context).primaryColor),
+                  Icon(Icons.star, color: Theme
+                      .of(context)
+                      .primaryColor),
                   title: const Text('Rating'),
                   subtitle: Text(restaurant.rating.toString()),
                 ),
@@ -267,15 +275,15 @@ class _MyMapState extends State<MyMap> {
         FlutterMap(
           mapController: mapController,
           options: MapOptions(
-            initialCenter:
-                LatLng(widget.position.latitude, widget.position.longitude),
+            initialCenter: LatLng(
+                widget.position.latitude, widget.position.longitude),
             initialZoom: 9.2,
             onPositionChanged: (position, hasGesture) {
               final zoom = position.zoom;
               if (zoom != null) {
                 updateMarkerSize(zoom);
               }
-              _onMapPositionChange(position, hasGesture);
+              _onMapPositionChange(position, hasGesture, context);
             },
           ),
           children: [
@@ -283,11 +291,18 @@ class _MyMapState extends State<MyMap> {
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
               userAgentPackageName: 'com.example.app',
             ),
-            MarkerLayer(markers: _createRestaurantMarkers()),
+            Consumer<GlobalStateService>(
+              builder: (context, state, child) {
+                List<Marker> markers = state.restaurants != null
+                    ? _createRestaurantMarkers(state.restaurants)
+                    : [];
+                return MarkerLayer(markers: markers);
+              },
+            ),
           ],
         ),
         const YellowBg(),
-        // const MySearchBar(),
+        // Other widgets like SearchBar, etc.
         Consumer<GlobalStateService>(
           builder: (context, state, child) {
             return AnimatedDataView();
@@ -297,3 +312,4 @@ class _MyMapState extends State<MyMap> {
     );
   }
 }
+

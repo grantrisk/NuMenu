@@ -97,13 +97,14 @@ class GlobalStateService extends ChangeNotifier {
 
   GeneralRestaurantType restaurantType = GeneralRestaurantType.any;
 
+  List<RestaurantType> apiResTypes = anyTypes;
+
   final ScrollController _scrollController = ScrollController();
 
   /// When the user selects a restaurant to view, this will hold its info.
   late Map<String, dynamic> selectedResInfo;
 
   AppState _state = AppState.viewingFoodTypes;
-  // TODO: map of restaurants from api
 
   AppState get state => _state;
 
@@ -115,7 +116,7 @@ class GlobalStateService extends ChangeNotifier {
     _scrollController.jumpTo(0);
   }
 
-  void changeRestaurantTypeTo(GeneralRestaurantType type, /*Position position*/) async {
+  void changeRestaurantTypeTo(GeneralRestaurantType type) async {
     restaurantType = type;
     restaurants = null;
     Position position = await LocationService.getCurrentLocation();
@@ -123,28 +124,28 @@ class GlobalStateService extends ChangeNotifier {
     try {
       switch (type) {
         case GeneralRestaurantType.american:
+          apiResTypes = americanTypes;
           restaurants = await loadRestaurants(position, americanTypes);
-        print('american');
           break;
         case GeneralRestaurantType.mexican:
+          apiResTypes = mexicanTypes;
           restaurants = await loadRestaurants(position, mexicanTypes);
-        print('mexican');
           break;
         case GeneralRestaurantType.italian:
+          apiResTypes = italianTypes;
           restaurants = await loadRestaurants(position, italianTypes);
-        print('italian');
           break;
         case GeneralRestaurantType.asian:
+          apiResTypes = asianTypes;
           restaurants = await loadRestaurants(position, asianTypes);
-        print('asian');
           break;
         case GeneralRestaurantType.mediterranean:
+          apiResTypes = mediterraneanTypes;
           restaurants = await loadRestaurants(position, mediterraneanTypes);
-        print('mediterranean');
           break;
         case GeneralRestaurantType.any:
+          apiResTypes = anyTypes;
           restaurants = await loadRestaurants(position, anyTypes);
-        print('any');
           break;
       }
     } catch (error) {
