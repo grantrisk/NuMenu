@@ -3,6 +3,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:numenu/state_management/global_state_service.dart';
 import 'package:numenu/views/widgets/restaurant_card.dart';
 import 'package:provider/provider.dart';
+import 'package:lottie/lottie.dart';
+import '../../models/restaurant.dart';
 
 class RestaurantResultsView extends StatefulWidget {
   const RestaurantResultsView({Key? key}) : super(key: key);
@@ -14,7 +16,7 @@ class RestaurantResultsView extends StatefulWidget {
 class _RestaurantResultsViewState extends State<RestaurantResultsView>
     with TickerProviderStateMixin {
   late List<AnimationController> _fadeControllers;
-
+  bool loading = false;
   @override
   void initState() {
     super.initState();
@@ -59,33 +61,52 @@ class _RestaurantResultsViewState extends State<RestaurantResultsView>
       screenHeight * 0.01,
     );
 
-    /// Here is how I am making the cards at the moment
-    ///
-    /// When filtering the restaurants, you could use the length of the list
-    /// rather than 10.
-    List<Widget> restaurantCards = List.generate(10, (index) {
-      return Padding(
-        padding: (index == 0)
-            ? EdgeInsets.fromLTRB(screenWidth * 0.05, 0.00, screenWidth * 0.05,
-                screenHeight * 0.01)
-            : buttonPadding,
-        child: FadeTransition(
-          opacity: _fadeControllers[index],
-          child: RestaurantCard(
-            /// Here, you could access the index of the list of filtered restaurants
-            resName: 'Restaurant ${index + 1}',
-            address: 'Address ${index + 1}',
-            rating: 5,
-            latLng: LatLng(0, 0),
-          ),
-        ),
-      );
-    });
-
     return Consumer<GlobalStateService>(
       builder: (context, state, child) {
-        return Column(
-          children: restaurantCards,
+        if (state.restaurants == null) {
+          return Center(
+            child: const SingleChildScrollView(
+              child: Column(
+                children: [CircularProgressIndicator()],
+              ),
+            ),
+          );
+        }
+
+        if (_fadeControllers.length != state.restaurants!.length) {
+          _fadeControllers = state.restaurants!.map((_) => AnimationController(
+            vsync: this, // Make sure your class includes TickerProviderStateMixin
+            duration: Duration(milliseconds: 500),
+          )..forward()).toList();
+        }
+
+        List<Widget>? restaurantCards;
+
+
+          restaurantCards = state.restaurants!.asMap().entries.map((entry) {
+            int index = entry.key;
+            Restaurant res = entry.value;
+
+            return Padding(
+              padding: index == 0
+                  ? EdgeInsets.fromLTRB(screenWidth * 0.05, 0.00, screenWidth * 0.05, screenHeight * 0.01)
+                  : buttonPadding,
+              child: FadeTransition(
+                opacity: Tween(begin: 0.0, end: 1.0).animate(_fadeControllers[index]),
+                child: RestaurantCard(
+                  resName: res.name,
+                  address: res.address,
+                  rating: res.rating,
+                  latLng: res.location,
+                ),
+              ),
+            );
+          }).toList();
+
+        return SingleChildScrollView(
+          child: Column(
+            children: restaurantCards ?? [Lottie.asset('assets/animations/loading.json')],
+          ),
         );
       },
     );

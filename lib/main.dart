@@ -71,7 +71,7 @@ void main() async {
     MultiProvider(providers: [
       // TODO: Create a param for state service called restaurants
       ChangeNotifierProvider(
-          create: (_) => GlobalStateService(restaurants: restaurants)),
+          create: (_) => GlobalStateService()),
     ], child: MyApp(position: position, restaurants: restaurants)),
   );
 }
@@ -287,7 +287,7 @@ class _MyMapState extends State<MyMap> {
           ],
         ),
         const YellowBg(),
-        const MySearchBar(),
+        // const MySearchBar(),
         Consumer<GlobalStateService>(
           builder: (context, state, child) {
             return AnimatedDataView();

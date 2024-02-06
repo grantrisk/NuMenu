@@ -37,4 +37,10 @@ class Restaurant {
       additionalInfo: json,
     );
   }
+
+  @override
+  String toString() {
+    return 'Restaurant{name: $name, address: $address, rating: $rating, location: (${location.latitude}, ${location.longitude}), additionalInfo: $additionalInfo}';
+  }
+
 }

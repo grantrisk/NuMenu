@@ -57,6 +57,7 @@ class RestaurantCard extends StatelessWidget {
               ],
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: EdgeInsets.only(
@@ -67,26 +68,28 @@ class RestaurantCard extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Text(
-                        resName,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
+                      Expanded( // Make the name flexible to avoid overflow
+                        child: Text(
+                          resName,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
+                          overflow: TextOverflow.ellipsis, // Prevent overflow
                         ),
                       ),
-                      const Spacer(),
                       const Text(
                         '⭐',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 10,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.02),
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.01),
                       Text(
                         rating.toString(),
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 12,
                           fontWeight: FontWeight.w800,
                           color: Color.fromARGB(255, 251, 181, 29),
                         ),
@@ -95,7 +98,7 @@ class RestaurantCard extends StatelessWidget {
                       Text(
                         '(400) Google',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 12,
                           fontWeight: FontWeight.w800,
                           color: Colors.grey[400]!,
                         ),
@@ -103,58 +106,51 @@ class RestaurantCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.05,
-                        bottom: MediaQuery.of(context).size.width * 0.025,
-                      ),
-                      /// Restaurant type here
-                      child: Text(
-                        'Food | Restaurant Type',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.grey[400],
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.05,
+                    bottom: MediaQuery.of(context).size.width * 0.025,
+                  ),
+                  child: Text(
+                    'Food | Restaurant Type',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.grey[400],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.05,
+                    right: MediaQuery.of(context).size.width * 0.05,
+                    bottom: MediaQuery.of(context).size.width * 0.025,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded( // Make the address flexible to avoid overflow
+                        child: Text(
+                          address,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.grey[400],
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.05,
-                        bottom: MediaQuery.of(context).size.width * 0.025,
-                      ),
-                      child: Text(
-                        address,
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+                      Text(
+                        '0.5 miles',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
                           color: Colors.grey[400],
                         ),
                       ),
-                    ),
-                    const Spacer(flex: 3),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.05,
-                        bottom: MediaQuery.of(context).size.width * 0.025,
-                        right: MediaQuery.of(context).size.width * 0.025,
-                      ),
-                      child: Text(
-                        '0.5 miles',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

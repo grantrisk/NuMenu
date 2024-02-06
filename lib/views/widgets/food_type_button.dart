@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:numenu/api/api.dart';
 import 'package:numenu/state_management/global_state_service.dart';
 import 'package:provider/provider.dart';
+
+import '../../services/location_service.dart';
 
 class FoodTypeButton extends StatelessWidget {
   final String buttonText;
@@ -15,12 +19,12 @@ class FoodTypeButton extends StatelessWidget {
           .changeStateTo(AppState.viewingRestaurantResults);
     }
 
-    void setRestaurantType(buttonText) {
+    void setRestaurantType(buttonText) async {
       switch (buttonText) {
         case 'MEXICAN':
+          print('mexican');
           Provider.of<GlobalStateService>(context, listen: false)
               .changeRestaurantTypeTo(GeneralRestaurantType.mexican);
-          print('mexican');
           break;
         case 'ITALIAN':
           Provider.of<GlobalStateService>(context, listen: false)

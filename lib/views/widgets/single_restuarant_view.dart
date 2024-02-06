@@ -71,43 +71,36 @@ class _SingleRestaurantViewState extends State<SingleRestaurantView>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                  height: squareSize + screenHeight * 0.02,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    // TODO
-                    /// This needs to be the length of the images list
-                    /// This needs to be the length of the images list
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: determineButtonPadding(screenWidth, screenHeight, index),
-                        child: FadeTransition(
-                          opacity: _fadeControllers[index],
-                          // TODO
-                          /// Pass in the image as a param
-                          /// ```
-                          ///  RestaurantImage(image: imagesList[index])
-                          /// ```
-                          child: Container(
-                            width: squareSize,
-                            height: squareSize,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 2.0,
-                              ),
+                height: squareSize + MediaQuery.of(context).size.height * 0.02,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 10, // Use the length of your images list here
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: determineButtonPadding(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height, index),
+                      child: FadeTransition(
+                        opacity: _fadeControllers[index],
+                        child: Container(
+                          width: squareSize,
+                          height: squareSize,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 2.0,
                             ),
                           ),
+                          // Add your image widget here
+                          // Example: RestaurantImage(image: imagesList[index])
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
+              ),
               Padding(
                 padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.width * 0.05,
                 ),
-                /// Restaurant type here
                 child: Text(
                   resInfo['Name'],
                   style: const TextStyle(
@@ -118,32 +111,32 @@ class _SingleRestaurantViewState extends State<SingleRestaurantView>
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).size.width * 0.05),
-              Row(
+              Wrap(
+                spacing: 8.0, // Space between the address and phone number if they wrap
+                alignment: WrapAlignment.start,
                 children: [
                   Text(
                     resInfo['Address'],
                     style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.grey[400],
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.grey[400],
                     ),
                   ),
-                  const Spacer(flex:2),
-                  Padding(
-                    padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.08),
-                    child: Text(
-                      resInfo['Phone'],
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.grey[400],
-                      ),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.02), // You can adjust or remove this based on your design needs
+                  Text(
+                    resInfo['Phone'],
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.grey[400],
                     ),
                   ),
                 ],
               ),
               SizedBox(height: MediaQuery.of(context).size.width * 0.05),
-              Row(
+              Wrap(
+                spacing: 8.0, // Space between elements if they wrap
                 children: [
                   const Text(
                     '⭐',
@@ -152,7 +145,6 @@ class _SingleRestaurantViewState extends State<SingleRestaurantView>
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                   Text(
                     resInfo['Rating'].toString(),
                     style: const TextStyle(
@@ -161,7 +153,6 @@ class _SingleRestaurantViewState extends State<SingleRestaurantView>
                       color: Color.fromARGB(255, 251, 181, 29),
                     ),
                   ),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                   Text(
                     '(400) Google',
                     style: TextStyle(

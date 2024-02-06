@@ -41,6 +41,7 @@ dependencies:
   url_launcher: ^6.0.9
   provider: ^6.1.1
   google_fonts: ^6.1.0
+  lottie: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,7 @@ flutter:
     - DEV.env
     - assets/images/restaurant_marker.png
     - icons/
+    - assets/animations/loading.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

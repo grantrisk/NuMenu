@@ -63,18 +63,9 @@ class BackAndCloseButtons extends StatelessWidget {
   }
 
   bool determineRestaurantTypeTextVisibility(GlobalStateService state) {
-    switch (state.state) {
-      case AppState.viewingFoodTypes:
-      case AppState.viewingRestaurantInfo:
-      case AppState.viewingMap:
-      case AppState.loading:
-      case AppState.init:
-      case AppState.minimizedDataView:
-        return false;
-      case AppState.viewingRestaurantResults:
-        return true;
-    }
+    return state.state == AppState.viewingRestaurantResults;
   }
+
 
   Widget showBackButton(GlobalStateService state, BuildContext context) {
     return AnimatedOpacity(
