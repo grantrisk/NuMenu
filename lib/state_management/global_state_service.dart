@@ -93,7 +93,7 @@ final List<RestaurantType> anyTypes = [
 /// The only component that can change the state of the application.
 class GlobalStateService extends ChangeNotifier {
 
-  late List<Restaurant>? restaurants;
+  List<Restaurant>? restaurants = [];
 
   GeneralRestaurantType restaurantType = GeneralRestaurantType.any;
 
